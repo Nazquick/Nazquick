@@ -63,6 +63,10 @@ button:focus-visible,.btn:focus-within,input:focus-visible{outline:3px solid col
 .toggle input{width:18px;height:18px;accent-color:var(--a)}
 .spacer{flex:1}
 .btn input[type=file]{position:absolute;width:1px;height:1px;opacity:0}
+.looprow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--line)}
+.looprow button{padding:10px 12px;font-size:14px}
+.looprow .val{font:600 13px/1 var(--f-mono);font-variant-numeric:tabular-nums;color:var(--b)}
+.looprow .label{margin-right:4px}
 .status{font-size:14px;color:var(--muted);min-height:21px}
 .status.err{color:var(--b)}
 
@@ -161,6 +165,13 @@ input[type=range]{width:100%;accent-color:var(--a)}
       <span class="spacer"></span>
       <label class="btn">Load track<input type="file" id="pick" accept="audio/*,.mp3,.m4a,.wav,.aac,.ogg,.flac"></label>
     </div>
+    <div class="looprow" aria-label="Loop">
+      <span class="label">Loop</span>
+      <button id="setA" type="button" disabled>Set start <span class="val" id="aVal">–</span></button>
+      <button id="setB" type="button" disabled>Set end <span class="val" id="bVal">–</span></button>
+      <label class="toggle"><input type="checkbox" id="loopOn" disabled> Loop on</label>
+      <button id="clearLoop" type="button" disabled>Clear</button>
+    </div>
     <div class="status" id="status" role="status"></div>
   </section>
 
@@ -217,6 +228,8 @@ const myId = rnd(10);
 let ctx = null, gain = null, src = null, buffer = null, peaks = null;
 let armed = false, loaded = null; // {name,url,ver,duration}
 let transport = { playing: false, pos: 0, at: 0 };
+let loop = { on: false, a: 0, b: 0 };
+function wrap(p) { if (loop.on && loop.b > loop.a && p >= loop.b) return loop.a + ((p - loop.a) % (loop.b - loop.a)); return p; }
 let channel = null, code = null, connected = false;
 let peers = {}; // id -> presence
 const clock = new Map(), pending = new Map();
@@ -239,7 +252,7 @@ async function arm() {
   armed = ctx.state === "running";
   track(); applyTransport(); render();
 }
-function sharedPos(at) { if (!transport.playing) return transport.pos; return Math.max(transport.pos, transport.pos + ((at ?? now()) - transport.at) / 1000); }
+function sharedPos(at) { if (!transport.playing) return transport.pos; return wrap(Math.max(transport.pos, transport.pos + ((at ?? now()) - transport.at) / 1000)); }
 function outLat() { return ctx ? (ctx.outputLatency || ctx.baseLatency || 0) : 0; }
 function stopSource() { if (src) { try { src.onended = null; src.stop(); } catch (e) {} src.disconnect(); src = null; } }
 function startAt(pos, wallAt) {
@@ -247,8 +260,11 @@ function startAt(pos, wallAt) {
   let when = ctx.currentTime + (wallAt - now()) / 1000 - outLat() + nudgeMs / 1000, offset = pos;
   const earliest = ctx.currentTime + 0.01;
   if (when < earliest) { offset += earliest - when; when = earliest; }
+  offset = wrap(offset);
   if (offset >= buffer.duration) { transport = { playing: false, pos: 0, at: 0 }; render(); return; }
-  const s = ctx.createBufferSource(); s.buffer = buffer; s.connect(gain); s.start(when, Math.max(0, offset));
+  const s = ctx.createBufferSource(); s.buffer = buffer; s.connect(gain);
+  if (loop.on && loop.b > loop.a) { s.loop = true; s.loopStart = loop.a; s.loopEnd = loop.b; }
+  s.start(when, Math.max(0, offset));
   s.onended = () => { if (src === s) { src = null; transport = { playing: false, pos: 0, at: 0 }; render(); } };
   src = s;
 }
@@ -275,6 +291,7 @@ function leadMs() { let r = 0; for (const id of others()) { const c = clock.get(
 function cmdPlay(pos) {
   if (!buffer) return;
   if (pos >= buffer.duration - 0.05) pos = 0;
+  if (loop.on && pos >= loop.b) pos = loop.a;
   const at = now() + ($("countIn").checked ? 3000 : leadMs());
   bcast("cmd", { type: "play", pos, at });
   setTransport({ playing: true, pos, at }, true);
@@ -294,6 +311,23 @@ function onCmd(d) {
     setTransport({ playing: true, pos, at: at - c.off });
   } else if (d.type === "pause" || d.type === "seek") { pending.delete(d.from); setTransport({ playing: false, pos, at: 0 }, true); }
 }
+function setLoop(nl, local) {
+  const wasPlaying = transport.playing && !!buffer;
+  let at = 0, p = 0;
+  if (local && wasPlaying) { at = now() + leadMs(); p = sharedPos(at); }
+  loop = nl;
+  if (src) { src.loop = loop.on && loop.b > loop.a; if (src.loop) { src.loopStart = loop.a; src.loopEnd = loop.b; } }
+  if (local) {
+    bcast("loop", { on: loop.on, a: loop.a, b: loop.b });
+    if (wasPlaying) { p = wrap(p); bcast("cmd", { type: "play", pos: p, at }); setTransport({ playing: true, pos: p, at }, true); }
+  }
+  render();
+}
+function onLoop(d) {
+  if (!d || d.from === myId) return;
+  const a = +d.a, b = +d.b; if (!isFinite(a) || !isFinite(b) || a < 0 || b < 0) return;
+  setLoop({ on: d.on === true && b > a, a, b }, false);
+}
 function ping() { bcast("ping", { t0: now() }); }
 function onPing(d) { if (!d || d.from === myId) return; const t0 = +d.t0; if (isFinite(t0)) bcast("pong", { to: d.from, t0, t1: now() }); }
 function onPong(d) {
@@ -308,6 +342,7 @@ function onPong(d) {
 }
 function shareStateWithNewcomer() {
   if (!buffer) return;
+  bcast("loop", { on: loop.on, a: loop.a, b: loop.b });
   if (transport.playing) { const at = now() + leadMs() + 300; bcast("cmd", { type: "play", pos: sharedPos(at), at }); }
   else bcast("cmd", { type: "seek", pos: transport.pos });
 }
@@ -336,6 +371,7 @@ async function linkTo(c) {
   channel.on("broadcast", { event: "cmd" }, m => onCmd(m.payload))
     .on("broadcast", { event: "ping" }, m => onPing(m.payload))
     .on("broadcast", { event: "pong" }, m => onPong(m.payload))
+    .on("broadcast", { event: "loop" }, m => onLoop(m.payload))
     .on("presence", { event: "sync" }, onPresenceSync)
     .subscribe(status => {
       connected = status === "SUBSCRIBED";
@@ -363,7 +399,7 @@ function computePeaks(buf, n = 900) {
   return out;
 }
 function setBuffer(buf, meta) {
-  stopSource(); buffer = buf; peaks = computePeaks(buf); loaded = Object.assign({}, meta, { duration: buf.duration });
+  stopSource(); loop = { on: false, a: 0, b: 0 }; buffer = buf; peaks = computePeaks(buf); loaded = Object.assign({}, meta, { duration: buf.duration });
   transport = { playing: false, pos: 0, at: 0 };
   track(); applyTransport(); render();
 }
@@ -407,6 +443,11 @@ function draw() {
   if (!peaks || !buffer) return;
   const frac = Math.min(1, sharedPos() / buffer.duration), bars = Math.max(40, Math.floor(w / 3)), cA = css("--a"), cW = css("--wave"), mid = h / 2;
   for (let i = 0; i < bars; i++) { const p = peaks[Math.floor(i / bars * peaks.length)] || 0, bh = Math.max(2, p * (h - 16)); g.fillStyle = (i / bars) <= frac ? cA : cW; g.fillRect(i * (w / bars), mid - bh / 2, Math.max(1, w / bars - 1), bh); }
+  if (loop.b > loop.a) {
+    const xa = loop.a / buffer.duration * w, xb = loop.b / buffer.duration * w, cB = css("--b");
+    g.globalAlpha = loop.on ? 0.16 : 0.07; g.fillStyle = cB; g.fillRect(xa, 0, xb - xa, h); g.globalAlpha = 1;
+    g.fillStyle = cB; g.fillRect(Math.round(xa) - 1, 0, 2, h); g.fillRect(Math.round(xb) - 1, 0, 2, h);
+  }
   g.fillStyle = css("--ink"); g.fillRect(Math.round(frac * w) - 1, 0, 2, h);
   if (hoverX != null) { g.fillStyle = css("--b"); g.fillRect(Math.round(hoverX) - 1, 0, 2, h); }
 }
@@ -428,6 +469,10 @@ function render() {
   $("armBar").hidden = armed; $("drop").hidden = !!buffer;
   $("trackTitle").textContent = loaded ? loaded.name : "No track loaded";
   const ready = armed && !!buffer; $("play").disabled = !ready; $("restart").disabled = !ready;
+  ["setA", "setB", "loopOn", "clearLoop"].forEach(id => $(id).disabled = !buffer);
+  const hasLoop = loop.b > loop.a;
+  $("aVal").textContent = hasLoop ? fmt(loop.a) : "–"; $("bVal").textContent = hasLoop ? fmt(loop.b) : "–";
+  $("loopOn").checked = loop.on && hasLoop;
   $("playText").textContent = transport.playing ? "Pause" : "Play";
   $("playIcon").setAttribute("d", transport.playing ? "M5 3h4v14H5zM11 3h4v14h-4z" : "M5 3l12 7-12 7z");
   $("youSound").innerHTML = armed ? '<span class="good">On</span>' : '<span class="bad">Tap Enable sound</span>';
@@ -467,7 +512,26 @@ $("copyBtn").onclick = () => {
 };
 $("armBtn").onclick = arm;
 $("play").onclick = () => { if (!armed) return arm(); transport.playing ? cmdPause() : cmdPlay(sharedPos()); };
-$("restart").onclick = () => cmdSeek(0);
+$("restart").onclick = () => cmdSeek(loop.on ? loop.a : 0);
+$("setA").onclick = () => {
+  if (!buffer) return;
+  const p = Math.min(sharedPos(), buffer.duration - 0.25);
+  const b = loop.b > p + 0.2 ? loop.b : buffer.duration;
+  setLoop({ on: true, a: p, b }, true);
+};
+$("setB").onclick = () => {
+  if (!buffer) return;
+  const p = sharedPos();
+  if (p <= loop.a + 0.2) { setStatus("The end has to come after the start. Move past the start point, then set the end.", true); return; }
+  setStatus("");
+  setLoop({ on: true, a: loop.a, b: Math.min(p, buffer.duration) }, true);
+};
+$("loopOn").onchange = e => {
+  if (!buffer) return;
+  if (e.target.checked && !(loop.b > loop.a)) setLoop({ on: true, a: 0, b: buffer.duration }, true);
+  else setLoop({ on: e.target.checked, a: loop.a, b: loop.b }, true);
+};
+$("clearLoop").onclick = () => setLoop({ on: false, a: 0, b: 0 }, true);
 $("pick").onchange = e => { const f = e.target.files[0]; e.target.value = ""; if (!armed) arm(); shareTrack(f); };
 $("nudge").oninput = e => {
   nudgeMs = +e.target.value; try { localStorage.setItem("2sync-nudge", nudgeMs); } catch (x) {}
