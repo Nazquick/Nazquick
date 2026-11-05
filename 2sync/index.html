@@ -550,7 +550,7 @@ document.addEventListener("keydown", e => { if (e.code === "Space" && code && !/
 window.addEventListener("resize", draw);
 
 const q = new URLSearchParams(location.search).get("code");
-if (q && /^[A-Z0-9]{6}$/i.test(q)) { $("codeInput").value = q.toUpperCase(); }
+if (q && /^[A-Z0-9]{6}$/i.test(q)) { $("codeInput").value = q.toUpperCase(); linkTo(q.toUpperCase()); }
 render(); requestAnimationFrame(tick);
 })();
 </script>
