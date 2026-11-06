@@ -1,0 +1,1103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pitch Studio — Quick Style</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" href="./assets/Quick-Style_Symbol_Black_RGB.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#000; --panel:#0a0b0d; --panel-2:#111317; --fg:#fff; --dim:rgba(255,255,255,.55); --faint:rgba(255,255,255,.3);
+    --line:rgba(255,255,255,.12); --line-2:rgba(255,255,255,.22); --field:rgba(255,255,255,.08); --field-f:rgba(255,255,255,.14);
+    --accent:#6fc6e8; --accent-2:#1c6f92; --ok:#7be0a6; --warn:#ffcf6b; --bad:#ff6b7f;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; height:100%; background:var(--bg); color:var(--fg); font-family:'Chakra Petch','Helvetica Neue',Arial,sans-serif; font-size:14px; }
+  button{ font-family:inherit; }
+  [hidden]{ display:none !important; }
+  a{ color:inherit; }
+
+  /* inputs — same pill language as thequickstyle.com */
+  input[type=text],input[type=email],input[type=url],input[type=password],input[type=number],input[type=search],select,textarea{
+    width:100%; font:inherit; font-size:13px; color:#fff; background:var(--field); border:1px solid transparent; border-radius:20px; padding:9px 16px; outline:none; transition:background .2s,border-color .2s; }
+  textarea{ border-radius:14px; resize:vertical; line-height:1.5; min-height:84px; }
+  input:focus,select:focus,textarea:focus{ background:var(--field-f); border-color:var(--line-2); }
+  select{ appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='rgba(255,255,255,0.7)' stroke-width='1.4'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; background-size:10px; padding-right:34px; }
+  select option{ color:#000; }
+  ::placeholder{ color:rgba(255,255,255,.4); }
+  label.f{ display:block; margin:0 0 16px; }
+  label.f > span{ display:flex; justify-content:space-between; align-items:center; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); margin:0 0 7px 4px; }
+  .row{ display:flex; gap:10px; } .row > *{ flex:1; min-width:0; }
+
+  .btn{ all:unset; cursor:pointer; display:inline-flex; align-items:center; gap:8px; font-size:11px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; padding:9px 16px; border-radius:20px; border:1px solid var(--line-2); color:#fff; transition:background .2s,border-color .2s,color .2s; white-space:nowrap; }
+  .btn:hover{ border-color:#fff; }
+  .btn.solid{ background:#fff; color:#000; border-color:#fff; }
+  .btn.solid:hover{ background:rgba(255,255,255,.85); }
+  .btn.ghost{ border-color:transparent; color:var(--dim); } .btn.ghost:hover{ color:#fff; }
+  .btn.danger:hover{ border-color:var(--bad); color:var(--bad); }
+  .btn.sm{ padding:6px 11px; font-size:10px; }
+  .btn:disabled,.btn[aria-disabled=true]{ opacity:.4; pointer-events:none; }
+  .ai{ all:unset; cursor:pointer; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); }
+  .ai:hover{ color:#fff; }
+
+  /* login */
+  .login{ min-height:100%; display:grid; place-items:center; padding:24px;
+    background:radial-gradient(120% 70% at 50% 118%, #6fc6e8 0%, #1c6f92 28%, #0a2733 52%, #000 78%); }
+  .login-card{ width:min(360px,100%); text-align:center; }
+  .login-card img{ width:110px; filter:brightness(0) invert(1); margin:0 auto 28px; display:block; }
+  .login-card h1{ font-size:20px; letter-spacing:.14em; text-transform:uppercase; margin:0 0 6px; }
+  .login-card p{ color:var(--dim); margin:0 0 26px; font-size:12px; letter-spacing:.08em; }
+  .login-card .row{ margin-top:10px; }
+  .msg{ font-size:12px; color:var(--dim); min-height:1.2em; margin-top:12px; } .msg.err{ color:var(--bad); }
+
+  /* shell */
+  .top{ position:sticky; top:0; z-index:20; display:flex; align-items:center; gap:24px; padding:0 22px; height:58px; background:rgba(0,0,0,.85); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+  .brand{ display:flex; align-items:center; gap:12px; font-size:11px; letter-spacing:.24em; text-transform:uppercase; }
+  .brand img{ width:34px; filter:brightness(0) invert(1); }
+  .nav{ display:flex; gap:4px; }
+  .nav button{ all:unset; cursor:pointer; padding:8px 14px; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); border-radius:20px; }
+  .nav button:hover{ color:#fff; } .nav button.on{ color:#fff; background:var(--field); }
+  .top .sp{ flex:1; }
+  .who{ font-size:11px; color:var(--dim); letter-spacing:.08em; }
+  .view{ padding:30px 26px 80px; max-width:1400px; margin:0 auto; }
+  .vhead{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:24px; flex-wrap:wrap; }
+  .vhead h2{ margin:0; font-size:26px; letter-spacing:.06em; text-transform:uppercase; }
+  .vhead p{ margin:6px 0 0; color:var(--dim); font-size:12px; letter-spacing:.06em; }
+  .tools{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .tools input[type=search]{ width:280px; }
+  .count{ font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); }
+
+  /* pitches grid */
+  .pgrid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; }
+  .pcard{ position:relative; border:1px solid var(--line); background:var(--panel); padding:20px; min-height:200px; display:flex; flex-direction:column; cursor:pointer; transition:border-color .2s, transform .2s; }
+  .pcard:hover{ border-color:var(--line-2); transform:translateY(-2px); }
+  .pcard h3{ margin:18px 0 6px; font-size:22px; text-transform:uppercase; letter-spacing:.02em; line-height:1.05; }
+  .pcard .hl{ color:var(--dim); font-size:12px; line-height:1.45; flex:1; }
+  .pcard .meta{ display:flex; gap:10px; align-items:center; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin-top:16px; flex-wrap:wrap; }
+  .pill{ display:inline-flex; align-items:center; gap:6px; font-size:10px; letter-spacing:.16em; text-transform:uppercase; padding:4px 9px; border-radius:20px; border:1px solid var(--line-2); color:var(--dim); }
+  .pill.pub{ color:var(--ok); border-color:rgba(123,224,166,.4); }
+  .pill.run{ color:var(--warn); border-color:rgba(255,207,107,.4); }
+  .pill.err{ color:var(--bad); border-color:rgba(255,107,127,.4); }
+  .dot{ width:6px; height:6px; border-radius:50%; background:currentColor; }
+  .pill.run .dot{ animation:blink 1s infinite; } @keyframes blink{ 50%{ opacity:.2; } }
+  .newcard{ border:1px dashed var(--line-2); background:transparent; align-items:center; justify-content:center; text-align:center; gap:14px; }
+  .plus{ width:64px; height:64px; border-radius:50%; border:1px solid var(--line-2); display:grid; place-items:center; position:relative; transition:transform .3s, background .3s; }
+  .plus::before,.plus::after{ content:''; position:absolute; background:#fff; } .plus::before{ width:22px; height:1px; } .plus::after{ width:1px; height:22px; }
+  .newcard:hover .plus{ transform:rotate(90deg); background:var(--field); }
+  .newcard span{ font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--dim); }
+
+  /* modal */
+  .modal{ position:fixed; inset:0; z-index:40; background:rgba(0,0,0,.75); backdrop-filter:blur(5px); display:none; align-items:flex-start; justify-content:center; overflow:auto; padding:6vh 16px; }
+  .modal.open{ display:flex; }
+  .sheet{ width:min(760px,100%); background:var(--panel); border:1px solid var(--line-2); padding:30px; position:relative; }
+  .sheet.wide{ width:min(980px,100%); }
+  .sheet h3{ margin:0 0 4px; font-size:20px; letter-spacing:.08em; text-transform:uppercase; }
+  .sheet .sub{ margin:0 0 26px; color:var(--dim); font-size:12px; letter-spacing:.05em; line-height:1.5; }
+  .sheet .x{ all:unset; cursor:pointer; position:absolute; top:16px; right:20px; font-size:22px; color:var(--dim); }
+  .sheet .x:hover{ color:#fff; }
+  .sheet .foot{ display:flex; justify-content:flex-end; gap:10px; margin-top:22px; align-items:center; }
+  .choices{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .choice{ all:unset; cursor:pointer; border:1px solid var(--line); padding:22px 20px 24px; background:var(--panel-2); display:flex; flex-direction:column; gap:10px; transition:border-color .2s,background .2s; }
+  .choice:hover,.choice:focus-visible{ border-color:#fff; background:#15181d; }
+  .choice .ic{ font-size:10px; letter-spacing:.24em; color:var(--accent); text-transform:uppercase; }
+  .choice b{ font-size:17px; text-transform:uppercase; letter-spacing:.03em; }
+  .choice p{ margin:0; color:var(--dim); font-size:12px; line-height:1.5; }
+  .chips{ display:flex; flex-wrap:wrap; gap:7px; }
+  .chip{ all:unset; cursor:pointer; font-size:11px; letter-spacing:.06em; padding:6px 12px; border-radius:20px; border:1px solid var(--line-2); color:var(--dim); }
+  .chip.on{ background:#fff; color:#000; border-color:#fff; }
+  .switch{ display:flex; align-items:center; gap:10px; font-size:12px; color:var(--dim); cursor:pointer; user-select:none; }
+  .switch input{ accent-color:#fff; width:16px; height:16px; }
+
+  /* editor */
+  .editor{ display:grid; grid-template-columns:minmax(380px,520px) 1fr; height:calc(100vh - 58px); }
+  .side{ border-right:1px solid var(--line); display:flex; flex-direction:column; min-height:0; }
+  .side-head{ padding:16px 20px 0; }
+  .side-head .t{ display:flex; align-items:center; gap:10px; justify-content:space-between; }
+  .side-head h2{ margin:0; font-size:20px; text-transform:uppercase; letter-spacing:.04em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .side-head .acts{ display:flex; gap:8px; margin:14px 0; flex-wrap:wrap; align-items:center; }
+  .save-state{ font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--dim); margin-left:auto; }
+  .tabs{ display:flex; gap:2px; border-bottom:1px solid var(--line); overflow-x:auto; }
+  .tabs button{ all:unset; cursor:pointer; padding:11px 12px; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); border-bottom:1px solid transparent; margin-bottom:-1px; white-space:nowrap; }
+  .tabs button.on{ color:#fff; border-color:#fff; }
+  .tabs .n{ color:var(--accent); margin-left:4px; }
+  .side-body{ flex:1; overflow:auto; padding:20px; }
+  .idea-box{ border:1px solid var(--line); padding:14px 14px 2px; margin-bottom:12px; background:var(--panel); }
+  .idea-box .h{ display:flex; justify-content:space-between; align-items:center; font-size:10px; letter-spacing:.2em; color:var(--dim); margin-bottom:10px; text-transform:uppercase; }
+  .ai-bar{ display:flex; gap:8px; margin:-8px 0 16px; } .ai-bar input{ font-size:12px; padding:7px 14px; }
+  .stat-chips .chip b{ font-weight:700; margin-right:5px; }
+
+  .preview{ position:relative; background:#050505; display:flex; flex-direction:column; min-width:0; }
+  .pv-bar{ display:flex; align-items:center; gap:10px; padding:10px 16px; border-bottom:1px solid var(--line); font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); }
+  .pv-bar .sp{ flex:1; }
+  .pv-stage{ position:relative; flex:1; overflow:hidden; display:flex; justify-content:center; }
+  .pv-stage iframe{ border:0; transform-origin:top center; background:#000; position:absolute; top:0; }
+  .gen-overlay{ position:absolute; inset:0; z-index:5; background:rgba(0,0,0,.82); display:grid; place-items:center; text-align:center; padding:30px; }
+  .gen-overlay .ring{ width:70px; height:70px; border:1px solid var(--line-2); border-top-color:#fff; border-radius:50%; margin:0 auto 24px; animation:spin 1.1s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .gen-overlay b{ display:block; font-size:16px; letter-spacing:.14em; text-transform:uppercase; margin-bottom:10px; }
+  .gen-overlay p{ color:var(--dim); font-size:12px; max-width:380px; margin:0 auto; line-height:1.6; }
+
+  /* experience lists */
+  .xfilters{ display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; align-items:center; }
+  .xfilters input[type=search]{ flex:1; min-width:180px; }
+  .xfilters select{ width:auto; }
+  .xlist{ border-top:1px solid var(--line); }
+  .xrow{ display:grid; grid-template-columns:22px 1fr auto; gap:4px 12px; align-items:center; padding:10px 6px; border-bottom:1px solid var(--line); cursor:pointer; }
+  .xrow:hover{ background:rgba(255,255,255,.03); }
+  .xrow input{ accent-color:#fff; width:15px; height:15px; margin:0; grid-row:span 2; }
+  .xrow b{ font-size:13px; font-weight:600; letter-spacing:.02em; }
+  .xrow small{ grid-column:2; color:var(--dim); font-size:12px; }
+  .xrow i{ font-style:normal; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); grid-row:1; grid-column:3; text-align:right; }
+  .xrow.sel b{ color:var(--accent); }
+  mark{ background:rgba(111,198,232,.28); color:#fff; border-radius:2px; }
+  .more{ text-align:center; padding:14px; }
+
+  table.lib{ width:100%; border-collapse:collapse; }
+  table.lib th{ text-align:left; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); font-weight:500; padding:10px; border-bottom:1px solid var(--line-2); position:sticky; top:58px; background:#000; }
+  table.lib td{ padding:11px 10px; border-bottom:1px solid var(--line); vertical-align:top; font-size:13px; }
+  table.lib td.c{ font-weight:600; }
+  table.lib tr:hover td{ background:rgba(255,255,255,.03); }
+  .tag{ display:inline-block; font-size:10px; color:var(--dim); border:1px solid var(--line); border-radius:12px; padding:1px 7px; margin:0 4px 4px 0; }
+  .star{ color:var(--warn); }
+
+  /* gallery */
+  .ktabs{ display:flex; gap:4px; }
+  .mgrid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; }
+  .mgrid.sm{ grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:8px; }
+  .mcard{ position:relative; aspect-ratio:16/11; background:var(--panel-2); border:1px solid var(--line); overflow:hidden; cursor:pointer; }
+  .mcard img,.mcard video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.85; }
+  .mcard .cap{ position:absolute; left:0; right:0; bottom:0; padding:22px 10px 8px; background:linear-gradient(0deg,rgba(0,0,0,.9),transparent); font-size:11px; line-height:1.3; }
+  .mcard .cap small{ display:block; color:var(--dim); font-size:10px; letter-spacing:.1em; text-transform:uppercase; }
+  .mcard .k{ position:absolute; top:7px; left:7px; font-size:9px; letter-spacing:.16em; text-transform:uppercase; background:rgba(0,0,0,.7); border:1px solid var(--line-2); padding:2px 7px; border-radius:12px; }
+  .mcard .tick{ position:absolute; top:7px; right:7px; width:22px; height:22px; border-radius:50%; border:1px solid rgba(255,255,255,.7); background:rgba(0,0,0,.5); display:grid; place-items:center; font-size:12px; }
+  .mcard.sel{ border-color:#fff; } .mcard.sel .tick{ background:#fff; color:#000; }
+  .mcard.sel .tick::after{ content:'✓'; }
+  .mcard .ord{ position:absolute; top:7px; right:34px; font-size:10px; background:#fff; color:#000; border-radius:10px; padding:2px 6px; }
+  .lv-head{ display:flex; justify-content:space-between; align-items:center; margin:0 0 6px; }
+  .lv-head b{ font-size:12px; letter-spacing:.2em; text-transform:uppercase; margin-right:10px; }
+  .lv-sep{ height:1px; background:var(--line); margin:22px 0 18px; }
+  .mcard.missing{ border-color:rgba(255,107,127,.5); }
+  .mcard.missing .noimg{ color:var(--bad); }
+  .noimg{ position:absolute; inset:0; display:grid; place-items:center; color:var(--dim); font-size:10px; letter-spacing:.2em; text-transform:uppercase; }
+  .drop{ border:1px dashed var(--line-2); padding:22px; text-align:center; color:var(--dim); font-size:12px; letter-spacing:.06em; cursor:pointer; margin-bottom:16px; }
+  .drop.over{ border-color:#fff; color:#fff; }
+
+  .research p,.research li{ color:rgba(255,255,255,.82); line-height:1.6; font-size:13px; }
+  .research h4{ font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); margin:22px 0 8px; font-weight:500; }
+  .research a{ color:var(--accent); word-break:break-all; }
+  .empty{ color:var(--dim); text-align:center; padding:50px 10px; font-size:12px; letter-spacing:.1em; }
+  .toast{ position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(20px); opacity:0; z-index:70; background:#fff; color:#000; padding:10px 18px; border-radius:22px; font-size:12px; letter-spacing:.06em; transition:all .3s; pointer-events:none; }
+  .toast.on{ opacity:1; transform:translateX(-50%); }
+  .toast.err{ background:var(--bad); color:#fff; }
+
+  @media (max-width:980px){
+    .editor{ grid-template-columns:1fr; height:auto; }
+    .preview{ height:80vh; border-top:1px solid var(--line); }
+    .side{ border-right:0; } .side-body{ overflow:visible; }
+    .choices{ grid-template-columns:1fr; }
+    .top{ gap:12px; padding:0 14px; } .who{ display:none; } .brand span{ display:none; }
+    .tools input[type=search]{ width:100%; }
+    table.lib .hide-m{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div class="login" id="login" hidden>
+  <div class="login-card">
+    <img src="./assets/Quick-Style_Symbol_Black_RGB.png" alt="Quick Style">
+    <h1>Pitch Studio</h1>
+    <p>Sign in with your Quick Style account</p>
+    <input type="text" id="li-user" placeholder="Username or email" autocomplete="username">
+    <div class="row"><input type="password" id="li-pass" placeholder="Password" autocomplete="current-password"><button class="btn solid" id="li-go" style="flex:0 0 auto">&rarr;</button></div>
+    <div class="msg" id="li-msg"></div>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app" hidden>
+  <div class="top">
+    <div class="brand"><img src="./assets/Quick-Style_Symbol_Black_RGB.png" alt="Quick Style"><span>Pitch Studio</span></div>
+    <nav class="nav" id="nav">
+      <button data-v="pitches" class="on">Pitches</button>
+      <button data-v="experiences">Experiences</button>
+      <button data-v="gallery">Gallery</button>
+    </nav>
+    <div class="sp"></div>
+    <span class="who" id="who"></span>
+    <button class="btn ghost sm" id="signout">Log out</button>
+  </div>
+
+  <!-- PITCHES -->
+  <section class="view" id="v-pitches">
+    <div class="vhead">
+      <div><h2>One-pager pitches</h2><p>Every pitch keeps the Quick Style identity. Intro, experiences and videos adapt to the brand.</p></div>
+      <div class="tools"><input type="search" id="p-search" placeholder="Search pitches"></div>
+    </div>
+    <div class="pgrid" id="p-grid"></div>
+  </section>
+
+  <!-- EXPERIENCES LIBRARY -->
+  <section class="view" id="v-experiences" hidden>
+    <div class="vhead">
+      <div><h2>Experience bank</h2><p>Every project Quick Style has done. Tick them per pitch in the editor.</p></div>
+      <div class="tools">
+        <button class="btn" id="x-import">Bulk import</button>
+        <button class="btn solid" id="x-add">+ Add experience</button>
+      </div>
+    </div>
+    <div class="xfilters">
+      <input type="search" id="x-search" placeholder="Search 500+ experiences — client, project, country, tag…">
+      <select id="x-cat"></select>
+      <span class="count" id="x-count"></span>
+    </div>
+    <table class="lib"><thead><tr><th>Client</th><th>Project</th><th class="hide-m">Category</th><th class="hide-m">Year</th><th class="hide-m">Location</th><th class="hide-m">Tags</th><th></th></tr></thead><tbody id="x-body"></tbody></table>
+    <div class="more" id="x-more"></div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="view" id="v-gallery" hidden>
+    <div class="vhead">
+      <div><h2>Gallery</h2><p>Past work videos, pictures and behind-the-scenes. Pick from these per pitch.</p></div>
+      <div class="tools">
+        <button class="btn" id="g-sync">Import website work</button>
+        <button class="btn solid" id="g-add">+ Add media</button>
+      </div>
+    </div>
+    <div class="xfilters">
+      <div class="ktabs" id="g-kinds"></div>
+      <input type="search" id="g-search" placeholder="Search gallery">
+      <span class="count" id="g-count"></span>
+    </div>
+    <div class="drop" id="g-drop">Drop videos or photos here to upload — or click to choose files</div>
+    <input type="file" id="g-files" multiple accept="image/*,video/*" hidden>
+    <div class="mgrid" id="g-grid"></div>
+  </section>
+
+  <!-- EDITOR -->
+  <section id="v-editor" hidden>
+    <div class="editor">
+      <div class="side">
+        <div class="side-head">
+          <div class="t"><button class="btn ghost sm" id="e-back">&larr; All pitches</button><span class="pill" id="e-status"></span></div>
+          <h2 id="e-title" style="margin-top:10px"></h2>
+          <div class="acts">
+            <button class="btn sm solid" id="e-publish">Publish</button>
+            <button class="btn sm" id="e-copy">Copy link</button>
+            <a class="btn sm" id="e-open" target="_blank" rel="noopener">Open</a>
+            <span class="save-state" id="e-save">Saved</span>
+          </div>
+          <div class="tabs" id="e-tabs">
+            <button data-t="content" class="on">Content</button>
+            <button data-t="exp">Experiences<span class="n" id="n-exp"></span></button>
+            <button data-t="media">Videos & photos<span class="n" id="n-media"></span></button>
+            <button data-t="settings">Settings</button>
+            <button data-t="research">Research</button>
+          </div>
+        </div>
+        <div class="side-body">
+          <!-- content -->
+          <div id="t-content">
+            <label class="f"><span>Eyebrow</span><input type="text" data-c="kicker" placeholder="A proposal for…"></label>
+            <label class="f"><span>Headline <button class="ai" data-ai="headline">✦ Rewrite</button></span><input type="text" data-c="headline"></label>
+            <div class="ai-bar" data-aibar="headline" hidden></div>
+            <label class="f"><span>Brand introduction <button class="ai" data-ai="intro">✦ Rewrite</button></span><textarea data-c="intro" rows="8" placeholder="Two short paragraphs. Blank line between them."></textarea></label>
+            <div class="ai-bar" data-aibar="intro" hidden></div>
+            <label class="f"><span>The insight <button class="ai" data-ai="insight">✦ Rewrite</button></span><textarea data-c="insight" rows="2"></textarea></label>
+            <div class="ai-bar" data-aibar="insight" hidden></div>
+            <label class="f" style="margin-bottom:8px"><span>Ideas <button class="ai" id="add-idea">+ Add idea</button></span></label>
+            <div id="ideas-ed"></div>
+            <label class="f"><span>Deliverables (one per line: title | text)</span><textarea data-lines="deliverables" data-cols="title,body" rows="3" placeholder="Photography | Editorial stills for both brands' channels"></textarea></label>
+            <label class="f"><span>Text above deliverables (optional)</span><textarea data-c="deliver_lead" rows="2"></textarea></label>
+            <label class="f" style="margin-top:12px"><span>Proof numbers (presets)</span><div class="chips stat-chips" id="stat-chips"></div></label>
+            <label class="f"><span>…or your own numbers (one per line: value | label) — replaces presets</span><textarea data-lines="custom_stats" data-cols="value,label" rows="3" placeholder="5.7M | Instagram, main account"></textarea></label>
+            <label class="f"><span>Reach breakdown (one per line: title | number | small line | text)</span><textarea data-lines="reach" data-cols="title,value,sub,body" rows="3" placeholder="1 · Scandinavia | 7.6M views (7%) | Past 30 days | Home market…"></textarea></label>
+            <div class="row">
+              <label class="f"><span>Numbers title</span><input type="text" data-c="stats_title" placeholder="Proof, not promises"></label>
+              <label class="f"><span>Ideas title</span><input type="text" data-c="ideas_title" placeholder="The idea"></label>
+            </div>
+            <label class="f"><span>Experiences title</span><input type="text" data-c="exp_title" placeholder="Experience that applies"></label>
+            <label class="f"><span>Partners line (separate with · or ,)</span><textarea data-c="partners" rows="2" placeholder="IKEA · Nike · Coca-Cola"></textarea></label>
+            <label class="f"><span>Artists line</span><input type="text" data-c="artists" placeholder="BTS · Ed Sheeran · Usher"></label>
+            <label class="f"><span>Why Quick Style <button class="ai" data-ai="why_us">✦ Rewrite</button></span><textarea data-c="why_us" rows="4"></textarea></label>
+            <div class="ai-bar" data-aibar="why_us" hidden></div>
+            <label class="f"><span>Closing line <button class="ai" data-ai="closing">✦ Rewrite</button></span><input type="text" data-c="closing"></label>
+            <div class="ai-bar" data-aibar="closing" hidden></div>
+            <label class="f"><span>Button label</span><input type="text" data-c="cta_label" placeholder="Let's move"></label>
+          </div>
+          <!-- experiences picker -->
+          <div id="t-exp" hidden>
+            <div class="xfilters">
+              <input type="search" id="ex-search" placeholder="Search experiences…">
+              <select id="ex-cat"></select>
+            </div>
+            <div class="xfilters">
+              <label class="switch"><input type="checkbox" id="ex-only"> Ticked only</label>
+              <span class="count" id="ex-count"></span>
+              <span style="flex:1"></span>
+              <button class="btn sm ghost" id="ex-clear">Clear all</button>
+            </div>
+            <div class="xlist" id="ex-list"></div>
+            <div class="more" id="ex-more"></div>
+          </div>
+          <!-- media picker -->
+          <div id="t-media" hidden>
+            <div class="lv-head"><div><b>Loop videos</b><span class="count" id="lv-count"></span></div><button class="btn sm ghost" id="lv-refresh">Refresh</button></div>
+            <p class="count" style="margin:0 0 12px; line-height:1.6">From the <b>pitch/videos</b> folder. Ticked ones autoplay on a loop — #1 large, the rest below. Hover to preview.</p>
+            <div class="mgrid sm" id="lv-grid"></div>
+            <div class="lv-sep"></div>
+            <div class="lv-head"><div><b>Gallery</b></div></div>
+            <div class="xfilters"><div class="ktabs" id="em-kinds"></div><input type="search" id="em-search" placeholder="Search gallery"></div>
+            <p class="count" style="margin:0 0 12px">Tick order = order on the page. Videos show as “Selected work”, photos & BTS as a strip.</p>
+            <div class="mgrid sm" id="em-grid"></div>
+          </div>
+          <!-- settings -->
+          <div id="t-settings" hidden>
+            <label class="f"><span>Brand name</span><input type="text" id="s-brand"></label>
+            <label class="f"><span>Link (slug)</span><input type="text" id="s-slug"></label>
+            <label class="f"><span>Brand logo URL (optional, shown as Quick Style × logo)</span><input type="url" data-c="client_logo_url" placeholder="https://…/logo.svg"></label>
+            <p class="count" style="margin:22px 0 12px">Contact on the pitch</p>
+            <div class="row"><label class="f"><span>Name</span><input type="text" data-ct="name" placeholder="Nasir Sirikhan"></label><label class="f"><span>Role</span><input type="text" data-ct="role" placeholder="CEO"></label></div>
+            <div class="row"><label class="f"><span>Email</span><input type="email" data-ct="email" placeholder="nasir@thequickstyle.com"></label><label class="f"><span>Phone</span><input type="text" data-ct="phone"></label></div>
+            <div class="foot" style="justify-content:space-between">
+              <button class="btn sm" id="s-dup">Duplicate pitch</button>
+              <button class="btn sm danger" id="s-del">Delete pitch</button>
+            </div>
+          </div>
+          <!-- research -->
+          <div id="t-research" class="research" hidden></div>
+        </div>
+      </div>
+      <div class="preview">
+        <div class="pv-bar"><span>Live preview</span><span class="sp"></span>
+          <div class="ktabs"><button class="chip on" data-dev="desktop">Desktop</button><button class="chip" data-dev="mobile">Mobile</button></div></div>
+        <div class="pv-stage" id="pv-stage"><iframe id="pv" src="./index.html?embed=1" title="Pitch preview"></iframe>
+          <div class="gen-overlay" id="gen" hidden><div><div class="ring"></div><b id="gen-t">Researching</b><p id="gen-p"></p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ NEW PITCH MODAL ============ -->
+<div class="modal" id="m-new">
+  <div class="sheet wide">
+    <button class="x" data-close>&times;</button>
+    <div id="new-step1">
+      <h3>New one-pager pitch</h3>
+      <p class="sub">How do you want to build it? You can edit everything afterwards.</p>
+      <div class="choices">
+        <button class="choice" data-mode="research"><span class="ic">✦ Deep research</span><b>Build it for me</b><p>Claude researches the brand on the web, writes the intro and ideas, and picks the experiences and videos that fit.</p></button>
+        <button class="choice" data-mode="form"><span class="ic">✎ Your voice</span><b>Fill out the form</b><p>Tell it what you want to say, in your words. Claude shapes it into the pitch and picks the proof.</p></button>
+        <button class="choice" data-mode="manual"><span class="ic">□ Blank</span><b>Start blank</b><p>An empty pitch with the Quick Style identity. You write and tick everything yourself.</p></button>
+      </div>
+    </div>
+
+    <form id="new-research" hidden>
+      <h3>Build it for me</h3>
+      <p class="sub">Give the brand. Claude does the research and makes the calls — takes about 1–2 minutes.</p>
+      <div class="row"><label class="f"><span>Brand *</span><input type="text" name="brand_name" required placeholder="e.g. Red Bull"></label><label class="f"><span>Website</span><input type="url" name="website" placeholder="https://"></label></div>
+      <label class="f"><span>Anything to steer it? (optional)</span><textarea name="notes" rows="3" placeholder="e.g. They're launching in India this spring. Push sports performance + a campaign film."></textarea></label>
+      <div class="row"><label class="f"><span>Language</span><select name="language"><option>English</option><option>Norwegian</option><option>Swedish</option><option>Danish</option><option>Hindi</option><option>Arabic</option><option>Korean</option><option>Japanese</option><option>Spanish</option><option>French</option><option>German</option></select></label><label class="f"><span>Brand logo URL</span><input type="url" name="client_logo_url" placeholder="optional"></label></div>
+      <div class="foot"><button type="button" class="btn ghost" data-back>&larr; Back</button><button class="btn solid" type="submit">✦ Research & build</button></div>
+    </form>
+
+    <form id="new-form" hidden>
+      <h3>Fill out the form</h3>
+      <p class="sub">The more of your own words you give, the more it sounds like you.</p>
+      <div class="row"><label class="f"><span>Brand *</span><input type="text" name="brand_name" required></label><label class="f"><span>Website</span><input type="url" name="website" placeholder="https://"></label></div>
+      <div class="row"><label class="f"><span>Who's reading it?</span><input type="text" name="recipient" placeholder="e.g. Head of Brand, Nordics"></label><label class="f"><span>Brand logo URL</span><input type="url" name="client_logo_url" placeholder="optional"></label></div>
+      <label class="f"><span>The opportunity</span><textarea name="objective" rows="2" placeholder="What's happening at the brand, and what do you want to make with them?"></textarea></label>
+      <label class="f"><span>Your pitch, in your own words</span><textarea name="pitch_in_my_words" rows="6" placeholder="Write it like you'd say it across the table. Rough is fine."></textarea></label>
+      <label class="f"><span>Tone</span><div class="chips" data-chips="tone"><button type="button" class="chip on">Cinematic</button><button type="button" class="chip">Direct</button><button type="button" class="chip">Premium</button><button type="button" class="chip">Playful</button><button type="button" class="chip">Warm</button><button type="button" class="chip">Bold</button></div></label>
+      <label class="f"><span>Verticals to push</span><div class="chips" data-chips="verticals" id="vert-chips"></div></label>
+      <div class="row"><label class="f"><span>Credits you want mentioned</span><input type="text" name="must_mention" placeholder="e.g. BTS, Formula 1, Dior"></label><label class="f"><span>The ask</span><input type="text" name="ask" placeholder="e.g. a 30-min call next week"></label></div>
+      <div class="row"><label class="f"><span>Language</span><select name="language"><option>English</option><option>Norwegian</option><option>Swedish</option><option>Danish</option><option>Hindi</option><option>Arabic</option><option>Korean</option><option>Japanese</option><option>Spanish</option><option>French</option><option>German</option></select></label>
+        <label class="f"><span>&nbsp;</span><label class="switch" style="padding:8px 4px"><input type="checkbox" name="research" checked> Quick web check on the brand</label></label></div>
+      <div class="foot"><button type="button" class="btn ghost" data-back>&larr; Back</button><button class="btn solid" type="submit">✦ Write my pitch</button></div>
+    </form>
+
+    <form id="new-manual" hidden>
+      <h3>Start blank</h3>
+      <p class="sub">Name the brand. Everything else you fill in.</p>
+      <label class="f"><span>Brand *</span><input type="text" name="brand_name" required></label>
+      <div class="foot"><button type="button" class="btn ghost" data-back>&larr; Back</button><button class="btn solid" type="submit">Create</button></div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ EXPERIENCE EDIT MODAL ============ -->
+<div class="modal" id="m-exp">
+  <form class="sheet" id="xe-form">
+    <button class="x" type="button" data-close>&times;</button>
+    <h3 id="xe-title">Experience</h3><p class="sub">Tags help the AI match this experience to the right brands (industry, market, culture).</p>
+    <div class="row"><label class="f"><span>Client *</span><input type="text" name="client" required></label><label class="f"><span>Project</span><input type="text" name="title"></label></div>
+    <div class="row"><label class="f"><span>Category</span><input type="text" name="category" list="cat-list"></label><label class="f"><span>Year</span><input type="number" name="year" min="1990" max="2100"></label><label class="f"><span>Location</span><input type="text" name="location"></label></div>
+    <label class="f"><span>Tags (comma separated)</span><input type="text" name="tags" placeholder="sportswear, india, campaign"></label>
+    <label class="f"><span>Description (optional)</span><textarea name="description" rows="3"></textarea></label>
+    <label class="switch"><input type="checkbox" name="featured"> Flagship credit</label>
+    <div class="foot"><button type="button" class="btn danger" id="xe-del" style="margin-right:auto">Delete</button><button type="button" class="btn ghost" data-close>Cancel</button><button class="btn solid" type="submit">Save</button></div>
+  </form>
+</div>
+<datalist id="cat-list"></datalist>
+
+<!-- ============ BULK IMPORT MODAL ============ -->
+<div class="modal" id="m-import">
+  <div class="sheet">
+    <button class="x" data-close>&times;</button>
+    <h3>Bulk import experiences</h3>
+    <p class="sub">Paste from a spreadsheet (copy the cells) or a CSV, or choose a .csv file. First row should be headers:<br><b>client, title, year, category, location, tags, description</b> — any order, only <b>client</b> or <b>title</b> is required. Tags separated by ; or |.</p>
+    <textarea id="imp-text" rows="10" placeholder="client	title	year	category	location	tags&#10;Nike	Air Max Day campaign	2021	Brand Campaign	Oslo	sportswear;campaign"></textarea>
+    <div class="row" style="margin-top:12px; align-items:center"><input type="file" id="imp-file" accept=".csv,.tsv,.txt" style="flex:2"><span class="count" id="imp-preview" style="flex:3; text-align:right"></span></div>
+    <div class="foot"><button class="btn ghost" data-close>Cancel</button><button class="btn solid" id="imp-go">Import</button></div>
+  </div>
+</div>
+
+<!-- ============ MEDIA EDIT MODAL ============ -->
+<div class="modal" id="m-media">
+  <form class="sheet" id="me-form">
+    <button class="x" type="button" data-close>&times;</button>
+    <h3 id="me-title">Add media</h3><p class="sub">YouTube / Vimeo link, an image or video URL — or upload a file.</p>
+    <div class="row"><label class="f"><span>Type</span><select name="kind"><option value="video">Video — past work</option><option value="photo">Picture</option><option value="bts">BTS picture</option></select></label><label class="f"><span>Year</span><input type="number" name="year" min="1990" max="2100"></label></div>
+    <div class="row"><label class="f"><span>Title *</span><input type="text" name="title" required></label><label class="f"><span>Client</span><input type="text" name="client"></label></div>
+    <label class="f"><span>Link</span><input type="url" name="url" placeholder="https://youtube.com/watch?v=…"></label>
+    <label class="f"><span>…or upload</span><input type="file" name="file" accept="image/*,video/*"></label>
+    <label class="f"><span>Thumbnail URL (optional — for uploaded videos)</span><input type="url" name="thumb_url"></label>
+    <label class="f"><span>Tags (comma separated)</span><input type="text" name="tags" placeholder="fashion, kpop, live"></label>
+    <div class="foot"><button type="button" class="btn danger" id="me-del" style="margin-right:auto">Delete</button><span class="count" id="me-msg"></span><button type="button" class="btn ghost" data-close>Cancel</button><button class="btn solid" type="submit">Save</button></div>
+  </form>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="./qs-common.js"></script>
+<script>
+(function(){
+var sb = QS.client, esc = QS.esc;
+var $ = function(id){ return document.getElementById(id); };
+var $$ = function(sel, root){ return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+var S = { pitches: [], exps: [], media: [], cur: null, view: 'pitches', expLimit: 150, libLimit: 200, gKind: 'all', emKind: 'all', accent: null, dirty: false, poll: null };
+
+function toast(msg, err){ var t = $('toast'); t.textContent = msg; t.className = 'toast on' + (err ? ' err' : ''); clearTimeout(t._t); t._t = setTimeout(function(){ t.className = 'toast'; }, 2600); }
+function fail(res, label){ if (res && res.error){ toast((label ? label + ': ' : '') + res.error.message, true); return true; } return false; }
+function openModal(id){ $(id).classList.add('open'); }
+function closeModal(id){ $(id).classList.remove('open'); }
+$$('.modal').forEach(function(m){
+  m.addEventListener('click', function(e){ if (e.target === m || e.target.closest('[data-close]')) closeModal(m.id); });
+});
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') $$('.modal.open').forEach(function(m){ closeModal(m.id); }); });
+function fmtDate(d){ try { return new Date(d).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }); } catch(e){ return ''; } }
+function norm(s){ return String(s || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, ''); }
+function hl(text, q){ text = esc(text); if (!q) return text; var i = norm(text).indexOf(norm(q)); if (i < 0) return text; return text.slice(0, i) + '<mark>' + text.slice(i, i + q.length) + '</mark>' + text.slice(i + q.length); }
+
+/* ================= AUTH ================= */
+function showLogin(msg){ $('login').hidden = false; $('app').hidden = true; $('li-msg').textContent = msg || ''; $('li-msg').className = 'msg' + (msg ? ' err' : ''); }
+function signIn(){
+  $('li-msg').textContent = 'Signing in…'; $('li-msg').className = 'msg';
+  sb.auth.signInWithPassword({ email: QS.usernameToEmail($('li-user').value), password: $('li-pass').value }).then(function(r){
+    if (r.error) showLogin(r.error.message); else { $('li-pass').value = ''; boot(r.data.session); }
+  });
+}
+$('li-go').onclick = signIn;
+$('li-pass').addEventListener('keydown', function(e){ if (e.key === 'Enter') signIn(); });
+$('signout').onclick = function(){ sb.auth.signOut().then(function(){ showLogin(); }); };
+
+function boot(session){
+  if (!session){ showLogin(); return; }
+  sb.rpc('is_pitch_admin').then(function(r){
+    if (!r.data){ sb.auth.signOut(); showLogin('This account is not a pitch admin.'); return; }
+    $('login').hidden = true; $('app').hidden = false; $('who').textContent = session.user.email;
+    Promise.all([loadPitches(), loadExps(), loadMedia(), sb.from('site_settings').select('accent_hex').eq('id','main').maybeSingle()]).then(function(res){
+      S.accent = res[3] && res[3].data ? res[3].data.accent_hex : null;
+      route();
+    });
+  });
+}
+sb.auth.getSession().then(function(r){ boot(r.data.session); });
+
+/* ================= DATA ================= */
+function loadPitches(){ return sb.from('pitches').select('*').order('updated_at', { ascending: false }).then(function(r){ if (!fail(r)) S.pitches = r.data; renderPitches(); }); }
+function loadExps(){
+  // page through in case of thousands
+  var all = [];
+  function page(from){ return sb.from('pitch_experiences').select('*').order('featured', { ascending:false }).order('year', { ascending:false, nullsFirst:false }).order('client').range(from, from + 999).then(function(r){
+    if (fail(r)) return; all = all.concat(r.data); if (r.data.length === 1000) return page(from + 1000); }); }
+  return page(0).then(function(){ S.exps = all; buildCatOptions(); renderLib(); });
+}
+function loadMedia(){ return sb.from('pitch_media').select('*').order('created_at', { ascending:false }).then(function(r){ if (!fail(r)) S.media = r.data; renderGallery(); }); }
+function expById(id){ return S.exps.find(function(e){ return e.id === id; }); }
+function mediaById(id){ return S.media.find(function(m){ return m.id === id; }); }
+
+/* ================= ROUTING ================= */
+function setView(v){
+  S.view = v;
+  ['pitches','experiences','gallery','editor'].forEach(function(n){ $('v-' + n).hidden = n !== v; });
+  $$('#nav button').forEach(function(b){ b.classList.toggle('on', b.dataset.v === v || (v === 'editor' && b.dataset.v === 'pitches')); });
+  if (v === 'pitches') renderPitches();
+  if (v === 'editor') setTimeout(fitPreview, 0);
+  window.scrollTo(0, 0);
+}
+function route(){
+  var m = location.hash.match(/^#edit\/(.+)$/);
+  if (m){ var p = S.pitches.find(function(x){ return x.id === m[1]; }); if (p) return openEditor(p); }
+  var v = (location.hash || '#pitches').slice(1);
+  if (['pitches','experiences','gallery'].indexOf(v) < 0) v = 'pitches';
+  if (S.cur) leaveEditor();
+  setView(v);
+}
+window.addEventListener('hashchange', route);
+$$('#nav button').forEach(function(b){ b.onclick = function(){ location.hash = b.dataset.v; }; });
+
+/* ================= PITCHES LIST ================= */
+function statusPill(p){
+  var rs = p.research && p.research.status;
+  if (rs === 'running') return '<span class="pill run"><span class="dot"></span>Researching</span>';
+  if (rs === 'error') return '<span class="pill err"><span class="dot"></span>AI error</span>';
+  return p.status === 'published' ? '<span class="pill pub"><span class="dot"></span>Live</span>' : '<span class="pill"><span class="dot"></span>Draft</span>';
+}
+function renderPitches(){
+  var q = norm($('p-search').value);
+  var list = S.pitches.filter(function(p){ return !q || norm(p.brand_name + ' ' + (p.content && p.content.headline)).indexOf(q) > -1; });
+  $('p-grid').innerHTML = '<div class="pcard newcard" id="p-new" role="button" tabindex="0" aria-label="New pitch"><div class="plus"></div><span>New pitch</span></div>' +
+    list.map(function(p){
+      var c = p.content || {};
+      return '<div class="pcard" data-id="' + p.id + '" tabindex="0">' + statusPill(p) + '<h3>' + esc(p.brand_name) + '</h3><div class="hl">' + esc(c.headline && c.headline !== p.brand_name ? c.headline : (c.intro || '').slice(0, 110)) + '</div>' +
+        '<div class="meta"><span>' + fmtDate(p.updated_at) + '</span><span>·</span><span>' + (p.experience_ids || []).length + ' exp</span><span>·</span><span>' + (p.media_ids || []).length + ' media</span>' + (p.views ? '<span>·</span><span>' + p.views + ' views</span>' : '') + '</div></div>';
+    }).join('');
+  $('p-new').onclick = openNew;
+  $('p-new').onkeydown = function(e){ if (e.key === 'Enter') openNew(); };
+  $$('#p-grid .pcard[data-id]').forEach(function(el){ el.onclick = function(){ location.hash = 'edit/' + el.dataset.id; }; el.onkeydown = function(e){ if (e.key === 'Enter') el.click(); }; });
+  var running = S.pitches.some(function(p){ return p.research && p.research.status === 'running'; });
+  clearTimeout(S.listPoll);
+  if (running && S.view === 'pitches') S.listPoll = setTimeout(loadPitches, 5000);
+}
+$('p-search').oninput = renderPitches;
+
+/* ================= NEW PITCH ================= */
+$('vert-chips').innerHTML = QS.VERTICALS.map(function(v){ return '<button type="button" class="chip">' + esc(v) + '</button>'; }).join('');
+$$('[data-chips]').forEach(function(g){ g.addEventListener('click', function(e){ var c = e.target.closest('.chip'); if (c) c.classList.toggle('on'); }); });
+function newStep(id){ ['new-step1','new-research','new-form','new-manual'].forEach(function(n){ $(n).hidden = n !== id; }); var f = $(id).querySelector('input'); if (f) setTimeout(function(){ f.focus(); }, 30); }
+function openNew(){ newStep('new-step1'); $$('#m-new form').forEach(function(f){ f.reset(); }); openModal('m-new'); }
+$$('#m-new .choice').forEach(function(b){ b.onclick = function(){ newStep('new-' + b.dataset.mode); }; });
+$$('#m-new [data-back]').forEach(function(b){ b.onclick = function(){ newStep('new-step1'); }; });
+function formData(form){
+  var o = {}; new FormData(form).forEach(function(v, k){ if (typeof v === 'string' && v.trim()) o[k] = v.trim(); });
+  $$('[data-chips]', form).forEach(function(g){ o[g.dataset.chips] = $$('.chip.on', g).map(function(c){ return c.textContent; }); });
+  var cb = form.querySelector('input[name=research]'); if (cb) o.research = cb.checked;
+  return o;
+}
+function generate(mode, brief, btn){
+  btn.setAttribute('aria-disabled', 'true'); var old = btn.textContent; btn.textContent = 'Starting…';
+  brief.contact = { name: 'Nasir Sirikhan', role: 'CEO', email: 'nasir@thequickstyle.com' };
+  callAi({ mode: mode, brief: brief }).then(function(data){
+    btn.removeAttribute('aria-disabled'); btn.textContent = old;
+    if (!data) return;
+    closeModal('m-new');
+    loadPitches().then(function(){ location.hash = 'edit/' + data.id; });
+  });
+}
+// calls the pitch-ai edge function; resolves to data, or null after showing the error
+function callAi(body){
+  return sb.functions.invoke('pitch-ai', { body: body }).then(function(r){
+    if (r.error){
+      var ctx = r.error.context;
+      if (ctx && typeof ctx.json === 'function') return ctx.json().then(function(j){ toast(j.error || r.error.message, true); return null; }, function(){ toast(r.error.message, true); return null; });
+      toast(r.error.message, true); return null;
+    }
+    if (r.data && r.data.error){ toast(r.data.error, true); return null; }
+    return r.data;
+  });
+}
+$('new-research').onsubmit = function(e){ e.preventDefault(); generate('research', formData(this), this.querySelector('[type=submit]')); };
+$('new-form').onsubmit = function(e){ e.preventDefault(); generate('form', formData(this), this.querySelector('[type=submit]')); };
+$('new-manual').onsubmit = function(e){
+  e.preventDefault(); var brand = this.brand_name.value.trim(); if (!brand) return;
+  var slug = uniqueSlug(QS.slugify(brand));
+  sb.from('pitches').insert({ slug: slug, brand_name: brand, mode: 'manual', content: { kicker: 'A proposal for ' + brand, headline: brand, ideas: [{},{},{}], stats: ['years','countries','reach'], cta_label: "Let's move", contact: { name: 'Nasir Sirikhan', role: 'CEO', email: 'nasir@thequickstyle.com' } } })
+    .select().single().then(function(r){ if (fail(r)) return; closeModal('m-new'); S.pitches.unshift(r.data); location.hash = 'edit/' + r.data.id; });
+};
+function uniqueSlug(base, exceptId){
+  var s = base, n = 2;
+  while (S.pitches.some(function(p){ return p.slug === s && p.id !== exceptId; })) s = base + '-' + (n++);
+  return s;
+}
+
+/* ================= EDITOR ================= */
+function openEditor(p){
+  S.cur = JSON.parse(JSON.stringify(p));
+  S.cur.content = S.cur.content || {};
+  S.cur.content.contact = S.cur.content.contact || {};
+  setView('editor');
+  fillEditor(); setTab(S.tab || 'content');
+  checkGenerating();
+}
+function leaveEditor(){ if (S.dirty) saveNow(); clearTimeout(S.poll); S.cur = null; }
+$('e-back').onclick = function(){ location.hash = 'pitches'; };
+
+function fillEditor(){
+  var p = S.cur, c = p.content;
+  $('e-title').textContent = p.brand_name;
+  $('e-status').outerHTML = statusPill(p).replace('class="pill', 'id="e-status" class="pill');
+  $('e-publish').textContent = p.status === 'published' ? 'Unpublish' : 'Publish';
+  $('e-open').href = QS.pitchUrl(p.slug) + (p.status === 'draft' ? '&preview=1' : '');
+  $$('[data-c]').forEach(function(el){ el.value = c[el.dataset.c] || ''; });
+  $$('[data-ct]').forEach(function(el){ el.value = (c.contact || {})[el.dataset.ct] || ''; });
+  $$('[data-lines]').forEach(function(el){ var cols = el.dataset.cols.split(','); el.value = (c[el.dataset.lines] || []).map(function(o){ return cols.map(function(k){ return o[k] || ''; }).join(' | ').replace(/( \| )+$/, ''); }).join('\n'); });
+  $('s-brand').value = p.brand_name; $('s-slug').value = p.slug;
+  renderIdeasEd(); renderStatChips(); renderExpPicker(); renderMediaPicker(); renderResearch(); counts();
+  if (S.folderVideos) renderLoopPicker(); else loadFolderVideos();
+  pushPreview();
+}
+function counts(){ $('n-exp').textContent = (S.cur.experience_ids || []).length || ''; $('n-media').textContent = ((S.cur.media_ids || []).length + ((S.cur.content.loop_videos || []).length)) || ''; }
+
+function setTab(t){
+  S.tab = t;
+  $$('#e-tabs button').forEach(function(b){ b.classList.toggle('on', b.dataset.t === t); });
+  ['content','exp','media','settings','research'].forEach(function(n){ $('t-' + n).hidden = n !== t; });
+}
+$$('#e-tabs button').forEach(function(b){ b.onclick = function(){ setTab(b.dataset.t); }; });
+
+function changed(){ S.dirty = true; $('e-save').textContent = 'Unsaved…'; clearTimeout(S.saveT); S.saveT = setTimeout(saveNow, 1200); schedulePreview(); counts(); }
+function saveNow(){
+  if (!S.cur || !S.dirty) return Promise.resolve();
+  var p = S.cur; S.dirty = false; $('e-save').textContent = 'Saving…';
+  return sb.from('pitches').update({ brand_name: p.brand_name, slug: p.slug, status: p.status, content: p.content, experience_ids: p.experience_ids, media_ids: p.media_ids })
+    .eq('id', p.id).select().single().then(function(r){
+      if (fail(r, 'Save failed')){ S.dirty = true; $('e-save').textContent = 'Not saved'; return; }
+      var i = S.pitches.findIndex(function(x){ return x.id === p.id; }); if (i > -1) S.pitches[i] = r.data;
+      if (S.cur && S.cur.id === p.id){ S.cur.updated_at = r.data.updated_at; $('e-save').textContent = 'Saved ' + new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }); }
+    });
+}
+window.addEventListener('beforeunload', function(e){ if (S.dirty){ saveNow(); e.preventDefault(); e.returnValue = ''; } });
+document.addEventListener('keydown', function(e){ if ((e.metaKey || e.ctrlKey) && e.key === 's' && S.cur){ e.preventDefault(); clearTimeout(S.saveT); saveNow(); } });
+
+$$('[data-c]').forEach(function(el){ el.addEventListener('input', function(){ S.cur.content[el.dataset.c] = el.value; changed(); }); });
+$$('[data-lines]').forEach(function(el){ el.addEventListener('input', function(){
+  var cols = el.dataset.cols.split(',');
+  S.cur.content[el.dataset.lines] = el.value.split('\n').map(function(line){
+    if (!line.trim()) return null; var parts = line.split('|').map(function(s){ return s.trim(); }), o = {};
+    cols.forEach(function(k, i){ o[k] = i === cols.length - 1 ? parts.slice(i).join(' | ') : (parts[i] || ''); }); return o;
+  }).filter(Boolean);
+  changed();
+}); });
+$$('[data-ct]').forEach(function(el){ el.addEventListener('input', function(){ S.cur.content.contact = S.cur.content.contact || {}; S.cur.content.contact[el.dataset.ct] = el.value; changed(); }); });
+$('s-brand').addEventListener('input', function(){ S.cur.brand_name = this.value; $('e-title').textContent = this.value; changed(); });
+$('s-slug').addEventListener('change', function(){
+  var s = QS.slugify(this.value); s = uniqueSlug(s, S.cur.id); this.value = s; S.cur.slug = s; $('e-open').href = QS.pitchUrl(s); changed();
+});
+
+$('e-publish').onclick = function(){
+  S.cur.status = S.cur.status === 'published' ? 'draft' : 'published'; S.dirty = true;
+  saveNow().then(function(){ fillEditor(); toast(S.cur.status === 'published' ? 'Live — link copied' : 'Back to draft'); if (S.cur.status === 'published') copyLink(true); });
+};
+function copyLink(silent){ var u = QS.pitchUrl(S.cur.slug); (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(function(){ if (!silent) toast('Link copied' + (S.cur.status === 'draft' ? ' — publish it before sending' : '')); }, function(){ prompt('Copy link', u); }); }
+$('e-copy').onclick = function(){ copyLink(); };
+$('s-dup').onclick = function(){
+  var p = S.cur, slug = uniqueSlug(p.slug + '-copy');
+  sb.from('pitches').insert({ slug: slug, brand_name: p.brand_name, mode: p.mode, brief: p.brief, content: p.content, experience_ids: p.experience_ids, media_ids: p.media_ids, research: p.research && p.research.status === 'done' ? p.research : {} })
+    .select().single().then(function(r){ if (fail(r)) return; S.pitches.unshift(r.data); toast('Duplicated'); location.hash = 'edit/' + r.data.id; });
+};
+$('s-del').onclick = function(){
+  if (!confirm('Delete the ' + S.cur.brand_name + ' pitch? The link will stop working.')) return;
+  var id = S.cur.id; S.dirty = false;
+  sb.from('pitches').delete().eq('id', id).then(function(r){ if (fail(r)) return; S.pitches = S.pitches.filter(function(p){ return p.id !== id; }); toast('Deleted'); location.hash = 'pitches'; });
+};
+
+/* ideas */
+function renderIdeasEd(){
+  var ideas = S.cur.content.ideas = S.cur.content.ideas || [];
+  $('ideas-ed').innerHTML = ideas.map(function(it, i){
+    return '<div class="idea-box" data-i="' + i + '"><div class="h"><span>Idea 0' + (i + 1) + '</span><span><button class="ai" data-ai="idea:' + i + '">✦ Rewrite</button> &nbsp; <button class="ai" data-rm="' + i + '" style="color:var(--dim)">Remove</button></span></div>' +
+      '<div class="ai-bar" data-aibar="idea:' + i + '" hidden></div>' +
+      '<label class="f"><input type="text" data-k="title" placeholder="Title" value="' + esc(it.title) + '"></label>' +
+      '<label class="f"><select data-k="vertical"><option value="">Vertical…</option>' + QS.VERTICALS.map(function(v){ return '<option' + (v === it.vertical ? ' selected' : '') + '>' + esc(v) + '</option>'; }).join('') + (it.vertical && QS.VERTICALS.indexOf(it.vertical) < 0 ? '<option selected>' + esc(it.vertical) + '</option>' : '') + '</select></label>' +
+      '<label class="f"><textarea data-k="body" rows="3" placeholder="What we make, and why it works for them">' + esc(it.body) + '</textarea></label></div>';
+  }).join('');
+  $$('#ideas-ed .idea-box').forEach(function(box){
+    var i = +box.dataset.i;
+    $$('[data-k]', box).forEach(function(el){ el.addEventListener('input', function(){ ideas[i][el.dataset.k] = el.value; changed(); }); });
+  });
+  $$('#ideas-ed [data-rm]').forEach(function(b){ b.onclick = function(){ ideas.splice(+b.dataset.rm, 1); renderIdeasEd(); changed(); }; });
+  bindAi($('ideas-ed'));
+}
+$('add-idea').onclick = function(e){ e.preventDefault(); (S.cur.content.ideas = S.cur.content.ideas || []).push({}); renderIdeasEd(); changed(); };
+
+/* stats */
+function renderStatChips(){
+  var on = S.cur.content.stats = S.cur.content.stats || [];
+  $('stat-chips').innerHTML = Object.keys(QS.STATS).map(function(k){ var s = QS.STATS[k]; return '<button type="button" class="chip' + (on.indexOf(k) > -1 ? ' on' : '') + '" data-s="' + k + '"><b>' + s.value + '</b>' + esc(s.label) + '</button>'; }).join('');
+  $$('#stat-chips .chip').forEach(function(c){ c.onclick = function(e){ e.preventDefault(); var k = c.dataset.s, i = on.indexOf(k); if (i > -1) on.splice(i, 1); else on.push(k); c.classList.toggle('on'); changed(); }; });
+}
+
+/* AI rewrite per field */
+function bindAi(root){
+  $$('[data-ai]', root).forEach(function(b){
+    b.onclick = function(e){
+      e.preventDefault();
+      var key = b.dataset.ai, bar = document.querySelector('[data-aibar="' + key + '"]');
+      if (!bar.hidden){ bar.hidden = true; return; }
+      bar.innerHTML = '<input type="text" placeholder="How should it change? e.g. shorter, mention their India launch, more like me…"><button class="btn sm solid">Go</button>';
+      bar.hidden = false; var inp = bar.querySelector('input'); inp.focus();
+      var go = function(){ runRewrite(key, inp.value, bar); };
+      bar.querySelector('button').onclick = go; inp.onkeydown = function(ev){ if (ev.key === 'Enter'){ ev.preventDefault(); go(); } };
+    };
+  });
+}
+bindAi($('t-content'));
+function runRewrite(key, instruction, bar){
+  var c = S.cur.content, isIdea = key.indexOf('idea:') === 0, idx = isIdea ? +key.split(':')[1] : -1;
+  var current = isIdea ? JSON.stringify(c.ideas[idx]) : c[key];
+  var btn = bar.querySelector('button'); btn.textContent = '…'; btn.setAttribute('aria-disabled', 'true');
+  callAi({ mode: 'section', brand_name: S.cur.brand_name, field: isIdea ? 'idea (return JSON {"title","vertical","body"})' : key, current: current, instruction: instruction,
+    context: { headline: c.headline, intro: c.intro, insight: c.insight, ideas: c.ideas, brief: S.cur.brief, research: S.cur.research && S.cur.research.brand_summary } }).then(function(data){
+    btn.textContent = 'Go'; btn.removeAttribute('aria-disabled');
+    if (!data) return;
+    var t = data.text;
+    if (isIdea){ try { var m = t.match(/\{[\s\S]*\}/); c.ideas[idx] = Object.assign(c.ideas[idx], JSON.parse(m[0])); } catch(e){ c.ideas[idx].body = t; } renderIdeasEd(); }
+    else { c[key] = t; var el = document.querySelector('[data-c="' + key + '"]'); if (el) el.value = t; }
+    bar.hidden = true; changed(); toast('Rewritten');
+  });
+}
+
+/* experiences picker */
+function buildCatOptions(){
+  var cats = {}; S.exps.forEach(function(e){ if (e.category) cats[e.category] = (cats[e.category] || 0) + 1; });
+  var names = Object.keys(cats).sort();
+  var opts = '<option value="">All categories</option>' + names.map(function(n){ return '<option value="' + esc(n) + '">' + esc(n) + ' (' + cats[n] + ')</option>'; }).join('');
+  $('x-cat').innerHTML = opts; $('ex-cat').innerHTML = opts;
+  $('cat-list').innerHTML = names.map(function(n){ return '<option value="' + esc(n) + '">'; }).join('');
+}
+function expHay(e){ return e._h || (e._h = norm([e.client, e.title, e.category, e.location, e.year, (e.tags || []).join(' '), e.description].join(' '))); }
+function filterExps(q, cat){
+  var terms = norm(q).split(/\s+/).filter(Boolean);
+  return S.exps.filter(function(e){ if (cat && e.category !== cat) return false; var h = expHay(e); return terms.every(function(t){ return h.indexOf(t) > -1; }); });
+}
+function renderExpPicker(){
+  if (!S.cur) return;
+  var sel = S.cur.experience_ids = S.cur.experience_ids || [];
+  var q = $('ex-search').value, list = filterExps(q, $('ex-cat').value);
+  if ($('ex-only').checked) list = sel.map(expById).filter(Boolean).filter(function(e){ return list.indexOf(e) > -1; });
+  else list = list.slice().sort(function(a, b){ return (sel.indexOf(b.id) > -1) - (sel.indexOf(a.id) > -1); });
+  $('ex-count').textContent = sel.length + ' ticked · ' + list.length + ' shown of ' + S.exps.length;
+  var shown = list.slice(0, S.expLimit);
+  $('ex-list').innerHTML = shown.length ? shown.map(function(e){
+    var on = sel.indexOf(e.id) > -1;
+    return '<label class="xrow' + (on ? ' sel' : '') + '"><input type="checkbox" data-id="' + e.id + '"' + (on ? ' checked' : '') + '><b>' + (e.featured ? '<span class="star">★</span> ' : '') + hl(e.client || e.title, q) + '</b><i>' + esc([e.category, e.year].filter(Boolean).join(' · ')) + '</i><small>' + hl(e.client ? e.title : '', q) + (e.location ? ' — ' + esc(e.location) : '') + '</small></label>';
+  }).join('') : '<div class="empty">No experiences match.</div>';
+  $('ex-more').innerHTML = list.length > S.expLimit ? '<button class="btn sm" id="ex-more-b">Show more (' + (list.length - S.expLimit) + ')</button>' : '';
+  if ($('ex-more-b')) $('ex-more-b').onclick = function(){ S.expLimit += 200; renderExpPicker(); };
+}
+$('ex-list').addEventListener('change', function(e){
+  var cb = e.target; if (!cb.dataset.id) return;
+  var sel = S.cur.experience_ids, i = sel.indexOf(cb.dataset.id);
+  if (cb.checked && i < 0) sel.push(cb.dataset.id); if (!cb.checked && i > -1) sel.splice(i, 1);
+  cb.closest('.xrow').classList.toggle('sel', cb.checked);
+  $('ex-count').textContent = sel.length + ' ticked'; changed();
+});
+['ex-search','ex-cat','ex-only'].forEach(function(id){ $(id).addEventListener('input', function(){ S.expLimit = 150; renderExpPicker(); }); });
+$('ex-clear').onclick = function(){ if (!S.cur.experience_ids.length || !confirm('Untick all experiences?')) return; S.cur.experience_ids = []; renderExpPicker(); changed(); };
+
+/* media picker + gallery cards */
+var KINDS = [['all','All'],['video','Videos'],['photo','Pictures'],['bts','BTS']];
+function kindTabs(el, key, cb){
+  el.innerHTML = KINDS.map(function(k){ return '<button class="chip' + (S[key] === k[0] ? ' on' : '') + '" data-k="' + k[0] + '">' + k[1] + '</button>'; }).join('');
+  $$('.chip', el).forEach(function(b){ b.onclick = function(){ S[key] = b.dataset.k; kindTabs(el, key, cb); cb(); }; });
+}
+function mediaCard(m, opts){
+  var t = QS.thumbFor(m), vis = t ? '<img src="' + esc(t) + '" alt="" loading="lazy">' : (QS.isVideoFile(m.url) ? '<video src="' + esc(m.url) + '#t=0.5" muted preload="metadata"></video>' : '<div class="noimg">' + esc(m.kind) + '</div>');
+  var ord = opts && opts.order > -1 ? '<span class="ord">' + (opts.order + 1) + '</span>' : '';
+  return '<div class="mcard' + (opts && opts.order > -1 ? ' sel' : '') + '" data-id="' + m.id + '">' + vis + '<span class="k">' + (m.kind === 'bts' ? 'BTS' : m.kind) + '</span>' + (opts ? ord + '<span class="tick"></span>' : '') +
+    '<div class="cap">' + esc(m.title) + '<small>' + esc([m.client, m.year].filter(Boolean).join(' · ')) + '</small></div></div>';
+}
+function filterMedia(q, kind){ var t = norm(q); return S.media.filter(function(m){ return (kind === 'all' || m.kind === kind) && (!t || norm([m.title, m.client, m.year, (m.tags || []).join(' ')].join(' ')).indexOf(t) > -1); }); }
+function renderMediaPicker(){
+  if (!S.cur) return;
+  var sel = S.cur.media_ids = S.cur.media_ids || [];
+  var list = filterMedia($('em-search').value, S.emKind);
+  $('em-grid').innerHTML = list.length ? list.map(function(m){ return mediaCard(m, { order: sel.indexOf(m.id) }); }).join('') : '<div class="empty">Nothing in the gallery yet — add videos and photos in the Gallery tab.</div>';
+}
+$('em-grid').addEventListener('click', function(e){
+  var card = e.target.closest('.mcard'); if (!card) return;
+  var sel = S.cur.media_ids, i = sel.indexOf(card.dataset.id);
+  if (i > -1) sel.splice(i, 1); else sel.push(card.dataset.id);
+  renderMediaPicker(); changed();
+});
+$('em-search').oninput = renderMediaPicker;
+
+/* loop videos from the pitch/videos folder */
+var VIDEO_RE = /\.(mp4|m4v|mov|webm)$/i;
+function loadFolderVideos(){
+  // 1) videos.json written by "Update video list.command"  2) fallback: a server directory listing
+  return fetch('./videos/videos.json', { cache: 'no-store' }).then(function(r){ if (!r.ok) throw 0; return r.json(); })
+    .then(function(list){ return list.map(function(x){ return typeof x === 'string' ? x : x.file; }).filter(function(f){ return VIDEO_RE.test(f || ''); }); })
+    .catch(function(){
+      return fetch('./videos/', { cache: 'no-store' }).then(function(r){ if (!r.ok) throw 0; return r.text(); }).then(function(html){
+        var out = []; html.replace(/href="([^"?#]+)"/g, function(_, h){ var f = decodeURIComponent(h.split('/').pop()); if (VIDEO_RE.test(f) && out.indexOf(f) < 0) out.push(f); });
+        return out;
+      }).catch(function(){ return []; });
+    })
+    .then(function(files){ S.folderVideos = files.sort(function(a, b){ return a.localeCompare(b, undefined, { numeric: true }); }); renderLoopPicker(); });
+}
+function renderLoopPicker(){
+  if (!S.cur) return;
+  var sel = S.cur.content.loop_videos = S.cur.content.loop_videos || [];
+  var all = (S.folderVideos || []).slice();
+  sel.forEach(function(f){ if (all.indexOf(f) < 0) all.push(f); }); // ticked but no longer in folder
+  $('lv-count').textContent = sel.length + ' ticked · ' + (S.folderVideos || []).length + ' in folder';
+  $('lv-grid').innerHTML = all.length ? all.map(function(f){
+    var i = sel.indexOf(f), missing = (S.folderVideos || []).indexOf(f) < 0;
+    return '<div class="mcard' + (i > -1 ? ' sel' : '') + (missing ? ' missing' : '') + '" data-f="' + esc(f) + '">' +
+      (missing ? '<div class="noimg">Not in folder</div>' : '<video src="./videos/' + encodeURIComponent(f) + '#t=0.3" muted loop playsinline preload="metadata"></video>') +
+      '<span class="k">loop</span>' + (i > -1 ? '<span class="ord">' + (i + 1) + '</span>' : '') + '<span class="tick"></span>' +
+      '<div class="cap">' + esc(f.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ')) + '</div></div>';
+  }).join('') : '<div class="empty" style="padding:24px 10px">No videos in the folder yet. Drop files into <b>pitch/videos</b>, then double-click “Update video list”.</div>';
+  $$('#lv-grid video').forEach(function(v){
+    var card = v.closest('.mcard');
+    card.addEventListener('mouseenter', function(){ var p = v.play(); if (p) p.catch(function(){}); });
+    card.addEventListener('mouseleave', function(){ v.pause(); });
+  });
+}
+$('lv-grid').addEventListener('click', function(e){
+  var card = e.target.closest('.mcard'); if (!card) return;
+  var sel = S.cur.content.loop_videos, f = card.dataset.f, i = sel.indexOf(f);
+  if (i > -1) sel.splice(i, 1); else sel.push(f);
+  renderLoopPicker(); changed();
+});
+$('lv-refresh').onclick = function(){ loadFolderVideos().then(function(){ toast((S.folderVideos || []).length + ' videos in folder'); }); };
+kindTabs($('em-kinds'), 'emKind', renderMediaPicker);
+
+/* research tab */
+function renderResearch(){
+  var r = S.cur.research || {}, b = S.cur.brief || {};
+  var h = '';
+  if (r.status === 'running') h += '<p>Research is running…</p>';
+  if (r.status === 'error') h += '<p style="color:var(--bad)">The AI run failed: ' + esc(r.error) + '</p><button class="btn sm" id="r-retry">Try again</button>';
+  if (r.brand_summary) h += '<h4>Brand summary (internal)</h4><p>' + esc(r.brand_summary) + '</p>';
+  if (r.notes && r.notes.length) h += '<h4>What we found</h4><ul>' + r.notes.map(function(n){ return '<li>' + esc(n) + '</li>'; }).join('') + '</ul>';
+  if (r.sources && r.sources.length) h += '<h4>Sources</h4><ul>' + r.sources.map(function(s){ return '<li><a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.title) + '</a></li>'; }).join('') + '</ul>';
+  var bk = Object.keys(b).filter(function(k){ return k !== 'contact' && b[k] !== '' && !(Array.isArray(b[k]) && !b[k].length); });
+  if (bk.length) h += '<h4>Brief (' + esc(S.cur.mode) + ')</h4><ul>' + bk.map(function(k){ return '<li><b>' + esc(k.replace(/_/g, ' ')) + ':</b> ' + esc(Array.isArray(b[k]) ? b[k].join(', ') : b[k]) + '</li>'; }).join('') + '</ul>';
+  if (!h) h = '<div class="empty">This pitch was started blank — no research attached.</div>';
+  h += '<p class="count" style="margin-top:26px">Only you see this tab. It never appears on the pitch.</p>';
+  $('t-research').innerHTML = h;
+  if ($('r-retry')) $('r-retry').onclick = function(){
+    var p = S.cur; sb.from('pitches').delete().eq('id', p.id).then(function(){ S.pitches = S.pitches.filter(function(x){ return x.id !== p.id; }); S.cur = null;
+      var btn = { setAttribute: function(){}, removeAttribute: function(){}, textContent: '' }; generate(p.mode === 'manual' ? 'research' : p.mode, p.brief || { brand_name: p.brand_name }, btn); });
+  };
+}
+
+/* generation polling */
+function checkGenerating(){
+  clearTimeout(S.poll);
+  var r = S.cur && S.cur.research;
+  var running = r && r.status === 'running';
+  $('gen').hidden = !running;
+  if (!running) return;
+  var secs = Math.round((Date.now() - new Date(r.started_at).getTime()) / 1000);
+  $('gen-t').textContent = S.cur.mode === 'research' ? 'Researching ' + S.cur.brand_name : 'Writing your pitch';
+  $('gen-p').textContent = (S.cur.mode === 'research' ? 'Reading about the brand on the web, choosing the verticals, the credits and the videos that fit. ' : 'Shaping your words, picking the proof. ') + 'Usually 1–2 minutes · ' + secs + 's';
+  if (secs > 420){ $('gen-p').textContent = 'This is taking unusually long. You can leave this page — the pitch keeps building in the background.'; }
+  S.poll = setTimeout(function(){
+    sb.from('pitches').select('*').eq('id', S.cur.id).single().then(function(res){
+      if (!S.cur || res.error) return;
+      if (res.data.research && res.data.research.status !== 'running'){
+        var i = S.pitches.findIndex(function(x){ return x.id === res.data.id; }); if (i > -1) S.pitches[i] = res.data;
+        S.cur = JSON.parse(JSON.stringify(res.data)); S.cur.content.contact = S.cur.content.contact || {};
+        fillEditor(); toast(res.data.research.status === 'done' ? 'Pitch ready — review and publish' : 'AI run failed — see Research tab', res.data.research.status !== 'done');
+        if (res.data.research.status !== 'done') setTab('research');
+      }
+      checkGenerating();
+    });
+  }, 4000);
+}
+
+/* live preview */
+var pvReady = false;
+window.addEventListener('message', function(e){ if (e.origin === location.origin && e.data && e.data.type === 'qs-preview-ready'){ pvReady = true; pushPreview(); } });
+function schedulePreview(){ clearTimeout(S.pvT); S.pvT = setTimeout(pushPreview, 180); }
+function pushPreview(){
+  if (!S.cur || !pvReady) return;
+  var p = S.cur;
+  $('pv').contentWindow.postMessage({ type: 'qs-preview', pitch: {
+    brand_name: p.brand_name, status: p.status, content: p.content, accent_hex: S.accent,
+    experiences: (p.experience_ids || []).map(expById).filter(Boolean),
+    media: (p.media_ids || []).map(mediaById).filter(Boolean)
+  } }, location.origin);
+}
+var DEV = 'desktop';
+function fitPreview(){
+  var st = $('pv-stage'), f = $('pv'), w = DEV === 'mobile' ? 390 : 1440;
+  var scale = Math.min(1, st.clientWidth / w); if (DEV === 'mobile') scale = Math.min(1, (st.clientHeight) / 844, st.clientWidth / w);
+  f.style.width = w + 'px'; f.style.height = (st.clientHeight / scale) + 'px'; f.style.transform = 'scale(' + scale + ')';
+  if (DEV === 'mobile'){ f.style.height = '844px'; f.style.top = '0'; }
+}
+$$('[data-dev]').forEach(function(b){ b.onclick = function(){ DEV = b.dataset.dev; $$('[data-dev]').forEach(function(x){ x.classList.toggle('on', x === b); }); fitPreview(); }; });
+window.addEventListener('resize', fitPreview); new ResizeObserver(fitPreview).observe($('pv-stage'));
+
+/* ================= EXPERIENCE LIBRARY ================= */
+function renderLib(){
+  var q = $('x-search').value, list = filterExps(q, $('x-cat').value);
+  $('x-count').textContent = list.length + ' of ' + S.exps.length;
+  $('x-body').innerHTML = list.slice(0, S.libLimit).map(function(e){
+    return '<tr data-id="' + e.id + '"><td class="c">' + (e.featured ? '<span class="star">★</span> ' : '') + hl(e.client || '', q) + '</td><td>' + hl(e.title || '', q) + '</td><td class="hide-m">' + esc(e.category || '') + '</td><td class="hide-m">' + esc(e.year || '') + '</td><td class="hide-m">' + esc(e.location || '') + '</td><td class="hide-m">' + (e.tags || []).map(function(t){ return '<span class="tag">' + esc(t) + '</span>'; }).join('') + '</td><td><button class="btn sm ghost" data-edit="' + e.id + '">Edit</button></td></tr>';
+  }).join('') || '<tr><td colspan="7" class="empty">No experiences match.</td></tr>';
+  $('x-more').innerHTML = list.length > S.libLimit ? '<button class="btn sm" id="x-more-b">Show more (' + (list.length - S.libLimit) + ')</button>' : '';
+  if ($('x-more-b')) $('x-more-b').onclick = function(){ S.libLimit += 300; renderLib(); };
+  if (S.cur) renderExpPicker();
+}
+['x-search','x-cat'].forEach(function(id){ $(id).addEventListener('input', function(){ S.libLimit = 200; renderLib(); }); });
+$('x-body').addEventListener('click', function(e){ var b = e.target.closest('[data-edit]') || e.target.closest('tr[data-id]'); if (b) editExp(expById(b.dataset.edit || b.dataset.id)); });
+$('x-add').onclick = function(){ editExp(null); };
+var editingExp = null;
+function editExp(e){
+  editingExp = e; var f = $('xe-form'); f.reset();
+  $('xe-title').textContent = e ? 'Edit experience' : 'Add experience'; $('xe-del').hidden = !e;
+  if (e){ ['client','title','category','year','location','description'].forEach(function(k){ f[k].value = e[k] == null ? '' : e[k]; }); f.tags.value = (e.tags || []).join(', '); f.featured.checked = !!e.featured; }
+  openModal('m-exp'); setTimeout(function(){ f.client.focus(); }, 30);
+}
+$('xe-form').onsubmit = function(ev){
+  ev.preventDefault(); var f = this;
+  var row = { client: f.client.value.trim() || null, title: f.title.value.trim() || f.client.value.trim(), category: f.category.value.trim() || null, year: f.year.value ? +f.year.value : null,
+    location: f.location.value.trim() || null, description: f.description.value.trim() || null, featured: f.featured.checked,
+    tags: f.tags.value.split(',').map(function(t){ return t.trim().toLowerCase(); }).filter(Boolean) };
+  var q = editingExp ? sb.from('pitch_experiences').update(row).eq('id', editingExp.id).select().single() : sb.from('pitch_experiences').insert(row).select().single();
+  q.then(function(r){ if (fail(r)) return;
+    if (editingExp){ var i = S.exps.indexOf(editingExp); S.exps[i] = r.data; } else S.exps.unshift(r.data);
+    closeModal('m-exp'); buildCatOptions(); renderLib(); toast('Saved'); });
+};
+$('xe-del').onclick = function(){
+  if (!editingExp || !confirm('Delete "' + (editingExp.client || editingExp.title) + '" from the experience bank?')) return;
+  var id = editingExp.id;
+  sb.from('pitch_experiences').delete().eq('id', id).then(function(r){ if (fail(r)) return; S.exps = S.exps.filter(function(e){ return e.id !== id; }); closeModal('m-exp'); buildCatOptions(); renderLib(); toast('Deleted'); });
+};
+
+/* bulk import */
+$('x-import').onclick = function(){ $('imp-text').value = ''; $('imp-preview').textContent = ''; openModal('m-import'); };
+function parseDelimited(text){
+  text = text.replace(/\r\n?/g, '\n').trim(); if (!text) return [];
+  var first = text.split('\n')[0], d = first.indexOf('\t') > -1 ? '\t' : (first.split(';').length > first.split(',').length ? ';' : ',');
+  var rows = [], row = [], cell = '', q = false;
+  for (var i = 0; i < text.length; i++){
+    var ch = text[i];
+    if (q){ if (ch === '"'){ if (text[i + 1] === '"'){ cell += '"'; i++; } else q = false; } else cell += ch; }
+    else if (ch === '"' && cell === '') q = true;
+    else if (ch === d){ row.push(cell); cell = ''; }
+    else if (ch === '\n'){ row.push(cell); rows.push(row); row = []; cell = ''; }
+    else cell += ch;
+  }
+  row.push(cell); rows.push(row);
+  return rows.filter(function(r){ return r.some(function(c){ return c.trim(); }); });
+}
+var FIELDS = { client:['client','brand','artist','customer','klient','kunde'], title:['title','project','name','prosjekt','work','job'], year:['year','år','date','dato'], category:['category','type','kategori'], location:['location','country','city','place','sted','land'], tags:['tags','tag','keywords'], description:['description','notes','beskrivelse','details'] };
+function mapRows(rows){
+  if (!rows.length) return [];
+  var head = rows[0].map(function(h){ return norm(h).trim(); }), idx = {};
+  Object.keys(FIELDS).forEach(function(f){ var i = head.findIndex(function(h){ return FIELDS[f].indexOf(h) > -1; }); if (i > -1) idx[f] = i; });
+  var body = rows;
+  if (Object.keys(idx).length) body = rows.slice(1); else idx = { client:0, title:1, year:2, category:3, location:4, tags:5, description:6 };
+  return body.map(function(r){
+    var g = function(f){ return idx[f] == null ? '' : String(r[idx[f]] || '').trim(); };
+    var yr = (g('year').match(/(19|20)\d{2}/) || [])[0];
+    var o = { client: g('client') || null, title: g('title') || g('client'), year: yr ? +yr : null, category: g('category') || null, location: g('location') || null, description: g('description') || null,
+      tags: g('tags').split(/[;|,]/).map(function(t){ return t.trim().toLowerCase(); }).filter(Boolean) };
+    return o.title ? o : null;
+  }).filter(Boolean);
+}
+function updImpPreview(){ var n = mapRows(parseDelimited($('imp-text').value)).length; $('imp-preview').textContent = n ? n + ' experiences ready to import' : ''; }
+$('imp-text').oninput = updImpPreview;
+$('imp-file').onchange = function(){ var f = this.files[0]; if (!f) return; f.text().then(function(t){ $('imp-text').value = t; updImpPreview(); }); };
+$('imp-go').onclick = function(){
+  var rows = mapRows(parseDelimited($('imp-text').value)); if (!rows.length) return toast('Nothing to import', true);
+  var have = {}; S.exps.forEach(function(e){ have[norm(e.client) + '|' + norm(e.title) + '|' + (e.year || '')] = 1; });
+  var fresh = rows.filter(function(r){ var k = norm(r.client) + '|' + norm(r.title) + '|' + (r.year || ''); if (have[k]) return false; have[k] = 1; return true; });
+  var skipped = rows.length - fresh.length, btn = this; btn.setAttribute('aria-disabled', 'true'); btn.textContent = 'Importing…';
+  var chunks = []; for (var i = 0; i < fresh.length; i += 200) chunks.push(fresh.slice(i, i + 200));
+  chunks.reduce(function(pr, ch){ return pr.then(function(){ return sb.from('pitch_experiences').insert(ch).then(function(r){ if (r.error) throw r.error; }); }); }, Promise.resolve())
+    .then(function(){ closeModal('m-import'); toast('Imported ' + fresh.length + (skipped ? ' · ' + skipped + ' duplicates skipped' : '')); return loadExps(); })
+    .catch(function(e){ toast('Import failed: ' + e.message, true); })
+    .then(function(){ btn.removeAttribute('aria-disabled'); btn.textContent = 'Import'; });
+};
+
+/* ================= GALLERY ================= */
+function renderGallery(){
+  var list = filterMedia($('g-search').value, S.gKind);
+  $('g-count').textContent = list.length + ' items';
+  $('g-grid').innerHTML = list.length ? list.map(function(m){ return mediaCard(m); }).join('') : '<div class="empty">No media yet.</div>';
+  if (S.cur) renderMediaPicker();
+}
+kindTabs($('g-kinds'), 'gKind', renderGallery);
+$('g-search').oninput = renderGallery;
+$('g-grid').addEventListener('click', function(e){ var c = e.target.closest('.mcard'); if (c) editMedia(mediaById(c.dataset.id)); });
+$('g-add').onclick = function(){ editMedia(null); };
+var editingMedia = null;
+function editMedia(m){
+  editingMedia = m; var f = $('me-form'); f.reset(); $('me-msg').textContent = '';
+  $('me-title').textContent = m ? 'Edit media' : 'Add media'; $('me-del').hidden = !m;
+  if (m){ ['kind','title','client','url','thumb_url','year'].forEach(function(k){ f[k].value = m[k] == null ? '' : m[k]; }); f.tags.value = (m.tags || []).join(', '); }
+  else if (S.gKind !== 'all') f.kind.value = S.gKind;
+  openModal('m-media');
+}
+function upload(file, kind){
+  var ext = (file.name.split('.').pop() || 'bin').toLowerCase().replace(/[^a-z0-9]/g, '');
+  var path = 'pitch/' + kind + '/' + Date.now() + '-' + Math.random().toString(36).slice(2, 8) + '.' + ext;
+  return sb.storage.from('work-assets').upload(path, file, { contentType: file.type, upsert: false }).then(function(r){
+    if (r.error) throw r.error; return sb.storage.from('work-assets').getPublicUrl(path).data.publicUrl; });
+}
+$('me-form').onsubmit = function(ev){
+  ev.preventDefault(); var f = this, file = f.file.files[0];
+  if (!file && !f.url.value.trim()) { $('me-msg').textContent = 'Add a link or a file'; return; }
+  $('me-msg').textContent = file ? 'Uploading…' : 'Saving…';
+  (file ? upload(file, f.kind.value) : Promise.resolve(f.url.value.trim())).then(function(url){
+    var row = { kind: f.kind.value, title: f.title.value.trim(), client: f.client.value.trim() || null, url: url, thumb_url: f.thumb_url.value.trim() || null, year: f.year.value ? +f.year.value : null,
+      tags: f.tags.value.split(',').map(function(t){ return t.trim().toLowerCase(); }).filter(Boolean) };
+    return editingMedia ? sb.from('pitch_media').update(row).eq('id', editingMedia.id).select().single() : sb.from('pitch_media').insert(row).select().single();
+  }).then(function(r){ if (fail(r)) { $('me-msg').textContent = ''; return; }
+    if (editingMedia){ S.media[S.media.indexOf(editingMedia)] = r.data; } else S.media.unshift(r.data);
+    closeModal('m-media'); renderGallery(); toast('Saved'); })
+  .catch(function(e){ $('me-msg').textContent = ''; toast('Upload failed: ' + e.message, true); });
+};
+$('me-del').onclick = function(){
+  if (!editingMedia || !confirm('Remove "' + editingMedia.title + '" from the gallery? It will disappear from any pitch using it.')) return;
+  var id = editingMedia.id;
+  sb.from('pitch_media').delete().eq('id', id).then(function(r){ if (fail(r)) return; S.media = S.media.filter(function(m){ return m.id !== id; }); closeModal('m-media'); renderGallery(); toast('Removed'); });
+};
+// drag & drop multi upload
+var drop = $('g-drop');
+drop.onclick = function(){ $('g-files').click(); };
+$('g-files').onchange = function(){ uploadMany(this.files); this.value = ''; };
+['dragenter','dragover'].forEach(function(t){ drop.addEventListener(t, function(e){ e.preventDefault(); drop.classList.add('over'); }); });
+['dragleave','drop'].forEach(function(t){ drop.addEventListener(t, function(e){ e.preventDefault(); drop.classList.remove('over'); }); });
+drop.addEventListener('drop', function(e){ uploadMany(e.dataTransfer.files); });
+function uploadMany(files){
+  files = Array.prototype.slice.call(files || []); if (!files.length) return;
+  var done = 0, kindFor = function(f){ return f.type.indexOf('video') === 0 ? 'video' : (S.gKind === 'bts' ? 'bts' : 'photo'); };
+  drop.textContent = 'Uploading 0 / ' + files.length + '…';
+  files.reduce(function(pr, file){
+    return pr.then(function(){ var k = kindFor(file); return upload(file, k).then(function(url){
+      return sb.from('pitch_media').insert({ kind: k, title: file.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' '), url: url }).select().single();
+    }).then(function(r){ if (!fail(r)) S.media.unshift(r.data); done++; drop.textContent = 'Uploading ' + done + ' / ' + files.length + '…'; })
+      .catch(function(e){ toast(file.name + ': ' + e.message, true); }); });
+  }, Promise.resolve()).then(function(){ drop.textContent = 'Drop videos or photos here to upload — or click to choose files'; renderGallery(); toast(done + ' uploaded — click one to add title & client'); });
+}
+$('g-sync').onclick = function(){
+  sb.from('work_items').select('id,title,client,category,image_url,event_date').then(function(r){
+    if (fail(r)) return;
+    var have = {}; S.media.forEach(function(m){ if (m.work_item_id) have[m.work_item_id] = 1; });
+    var rows = r.data.filter(function(w){ return w.image_url && !have[w.id]; }).map(function(w){
+      var isImg = /\.(jpe?g|png|webp|gif|avif)(\?|$)/i.test(w.image_url);
+      return { kind: isImg ? 'photo' : 'video', title: w.title, client: w.client, url: w.image_url, year: w.event_date ? +w.event_date.slice(0, 4) : null, tags: [w.category], work_item_id: w.id };
+    });
+    if (!rows.length) return toast('Gallery already has everything from the website');
+    sb.from('pitch_media').insert(rows).then(function(r2){ if (fail(r2)) return; toast('Imported ' + rows.length + ' from the website'); loadMedia(); });
+  });
+};
+})();
+</script>
+</body>
+</html>
