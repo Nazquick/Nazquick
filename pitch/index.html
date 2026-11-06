@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Quick Style — Moving Perspective</title>
 <meta name="robots" content="noindex" />
+<script>
+  // Short links like thequickstyle.com/polestar: the slug comes from the path and assets load from /pitch/
+  (function(){ var m = location.pathname.match(/^\/([a-z0-9-]+)\/?$/);
+    if (m && m[1] !== 'pitch'){ window.QS_PATH_SLUG = m[1]; document.write('<base href="/pitch/">'); } })();
+</script>
 <link rel="icon" href="./assets/Quick-Style_Symbol_Black_RGB.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -237,7 +242,7 @@
       <div class="x-line"><span>Quick Style</span><span class="x"></span><span id="brand-mark"></span></div>
       <h1 class="headline" id="headline"></h1>
     </div>
-    <a class="scroll-cue" href="#intro">Scroll</a>
+    <a class="scroll-cue" href="#intro" onclick="event.preventDefault();document.getElementById('intro').scrollIntoView({behavior:'smooth'})">Scroll</a>
   </header>
 
   <section class="block bridge" id="intro">
@@ -330,7 +335,7 @@
   var esc = QS.esc;
   $('yr').textContent = new Date().getFullYear();
   var params = new URLSearchParams(location.search);
-  var slug = params.get('b') || params.get('p') || (location.hash || '').replace('#','');
+  var slug = params.get('b') || params.get('p') || (location.hash || '').replace('#','') || window.QS_PATH_SLUG;
   var embedded = params.get('embed') === '1';
 
   function setState(msg){ $('state').hidden = false; $('page').hidden = true; $('state-msg').textContent = msg; }

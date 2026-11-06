@@ -9,7 +9,7 @@
 
   // Proof numbers (from the Legacy script / strategy doc). Keys are what pitches store.
   QS.STATS = {
-    years:     { value: '23',   label: 'Years since Oslo, 2003' },
+    years:     { value: '20',   label: 'Years since Oslo, 2006' },
     countries: { value: '50+',  label: 'Countries performed in' },
     yt_views:  { value: '1.1B', label: 'YouTube views' },
     reach:     { value: '7.6B', label: 'Total reach' },
